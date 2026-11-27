@@ -37,7 +37,7 @@ $exe = Join-Path $dist 'Companian.exe'
 & $csc /nologo /target:winexe /platform:anycpu /optimize+ /debug- /codepage:65001 /utf8output /warn:4 `
     "/out:$exe" "/win32icon:$ico" "/win32manifest:$(Join-Path $root 'src\app.manifest')" `
     "/resource:$ico,Companian.app.ico" `
-    /r:System.dll /r:System.Drawing.dll /r:System.Windows.Forms.dll `
+    /r:System.dll /r:System.Drawing.dll /r:System.Windows.Forms.dll /r:System.Web.Extensions.dll `
     $sources
 if ($LASTEXITCODE -ne 0) { throw 'Build failed.' }
 

@@ -5,8 +5,8 @@
 <h1 align="center">Companian</h1>
 
 <p align="center">
-  Windows için küçük, hızlı ve taşınabilir bir yardımcı: <b>otomatik tıklayıcı</b>, <b>kapatma zamanlayıcısı</b>, <b>uyanık tutma</b> ve <b>hatırlatıcılar</b>.<br>
-  A small, fast, portable Windows companion: <b>auto clicker</b>, <b>shutdown timer</b>, <b>keep awake</b> and <b>reminders</b>.
+  Windows için küçük, hızlı ve taşınabilir bir yardımcı: <b>otomatik tıklayıcı</b>, <b>toplu kurulum yöneticisi</b>, <b>kapatma zamanlayıcısı</b>, <b>uyanık tutma</b> ve <b>hatırlatıcılar</b>.<br>
+  A small, fast, portable Windows companion: <b>auto clicker</b>, <b>bulk install manager</b>, <b>shutdown timer</b>, <b>keep awake</b> and <b>reminders</b>.
 </p>
 
 <p align="center">
@@ -19,7 +19,7 @@
 
 <p align="center">
   <img src="docs/clicker-tr.png" width="49%" alt="Otomatik tıklayıcı">
-  <img src="docs/shutdown-tr.png" width="49%" alt="Kapatma zamanlayıcısı">
+  <img src="docs/setup-tr.png" width="49%" alt="Toplu kurulum yöneticisi">
 </p>
 
 **[Türkçe](#türkçe)** · **[English](#english)**
@@ -32,8 +32,9 @@
 
 | | |
 |---|---|
-| 🖱️ **Otomatik tıklayıcı** | İmlecin olduğu yere ya da seçtiğin sabit bir konuma tıklar. Sol / sağ / orta tuş, tek veya çift tık. Tıklama aralığını saat-dakika-saniye-milisaniye olarak ayarla (saniyede kaç tık olacağı anında gösterilir). **Belirli sayıda**, **belirli süre boyunca** veya **sonsuz** tıklama. Başlamadan önce bekleme süresi. |
+| 🖱️ **Otomatik tıklayıcı** | İmlecin olduğu yere ya da seçtiğin sabit bir konuma tıklar. Sol / sağ / orta tuş, tek veya çift tık. Tıklama aralığını saat-dakika-saniye-milisaniye olarak ayarla (saniyede kaç tık olacağı anında gösterilir). **Belirli sayıda**, **belirli süre boyunca** veya **sonsuz** tıklama. Başlamadan önce bekleme süresi. **Konum listesi:** birden fazla konumu sıraya ekle, her biri için ayrı bekleme (ms) belirle, listeyi `.json` dosyası olarak kaydet ve tekrar yükle. |
 | ⌨️ **Genel kısayollar** | **F6** her uygulamadayken tıklayıcıyı başlatır/durdurur. **F8** imlecin o anki konumunu kaydeder. |
+| 📦 **Toplu kurulum yöneticisi** | Format sonrası programlarını (Chrome, VLC, WinRAR, 7-Zip, VS Code... 40 hazır program) tek tek kurmak yerine işaretle, **winget** ile sırayla ve sessizce kurulsun. winget'te arama yapıp istediğin paketi ekleyebilir, kendi **.exe / .msi / .msix kurulum dosyalarını** da listeye koyabilirsin (MSI, Inno Setup ve NSIS sessiz kurulur). **"Yalnızca benim için kur"** seçeneğiyle her şey `%LOCALAPPDATA%` altına kurulur ve **yönetici izni sorulmaz**; yalnızca yönetici izniyle kurulabilen programlar atlanıp listede belirtilir. Her programın durumu ve tam kayıt (log) arayüzde görünür. Listeyi `.json` olarak kaydet, yeni kurulumda yükle. |
 | ⏻ **Kapatma zamanlayıcısı** | Geri sayım ("1 saat sonra") ya da belirli bir saat ("23:30'da") sonunda **kapat, yeniden başlat, uyku, hazırda beklet, ekranı kilitle veya oturumu kapat**. Hızlı seçim düğmeleri (15 dk, 30 dk, 1 sa, 2 sa), son 1 dakikada iptal penceresi, isteğe bağlı zorla kapatma. |
 | ☀️ **Uyanık tut** | Bilgisayarın uykuya geçmesini ve ekranın kapanmasını engeller; süresiz ya da belirli dakika boyunca. İsteğe bağlı olarak fareyi dakikada bir 1 piksel oynatır. |
 | 🔔 **Hatırlatıcılar** | "30 dakika sonra mola ver" gibi tek seferlik veya tekrarlayan bildirimler. |
@@ -65,6 +66,17 @@ Gereksinim: Windows 10 veya 11 (gerekli .NET Framework 4.8 zaten Windows'ta yük
 Tıklayıcı, yanlışlıkla kendi Başlat/Durdur düğmesine basmasın diye Companian penceresinin üzerindeyken tıklamaz.
 Windows güvenlik kuralı gereği, normal haklarla çalışan bir program **yönetici olarak çalışan** pencerelere tıklama gönderemez.
 
+**Konum listesi:** *Konum listesi (sırayla tıkla)* seçeneğini işaretle, imleci her hedefe götürüp **F8**'e bas. Her adımın tuşu, tek/çift tık ve tıklamadan sonraki bekleme süresi (ms) ayrı ayarlanır. Listeyi *Kaydet (.json)* ile sakla, *Yükle (.json)* ile geri aç.
+
+#### Toplu kurulum
+
+1. **Toplu Kurulum** sekmesinde kurmak istediğin programları işaretle. Listede yoksa *winget'te ara* kutusuyla bul ve ekle ya da *Kurulum dosyası ekle* ile kendi `.exe` / `.msi` / `.msix` dosyalarını seç.
+2. **Yalnızca benim için kur** açık kalsın: programlar `--scope user` ile kullanıcı kapsamına kurulur ve hiçbir kurulum UAC penceresi açamaz. Yalnızca yönetici izniyle kurulabilen bir program varsa atlanır ve *"Yönetici izni gerekiyor"* olarak gösterilir.
+3. **Seçilenleri kur**'a bas. Programlar arka planda sırayla kurulur; her birinin durumu listede, ayrıntılar *Kayıt* alanında görünür.
+4. Format atmadan önce *Listeyi kaydet (.json)* ile listeyi başka bir sürücüye ya da USB belleğe kaydet; yeni Windows'ta Companian'ı açıp *Liste yükle* ve tek tıkla kur.
+
+winget, Windows 10 (1809+) ve 11'de *Uygulama Yükleyicisi* ile birlikte gelir. Bulunamazsa Companian Microsoft Store sayfasını açmayı önerir.
+
 ### Kaynaktan derleme
 
 Visual Studio veya .NET SDK gerekmez; Windows ile gelen C# derleyicisi kullanılır:
@@ -83,8 +95,9 @@ powershell -ExecutionPolicy Bypass -File .\build.ps1
 
 | | |
 |---|---|
-| 🖱️ **Auto clicker** | Clicks wherever the cursor is, or at a fixed position you pick. Left / right / middle button, single or double click. Set the interval in hours, minutes, seconds and milliseconds (clicks per second are shown live). Click **a set number of times**, **for a duration**, or **forever**. Optional start delay. |
+| 🖱️ **Auto clicker** | Clicks wherever the cursor is, or at a fixed position you pick. Left / right / middle button, single or double click. Set the interval in hours, minutes, seconds and milliseconds (clicks per second are shown live). Click **a set number of times**, **for a duration**, or **forever**. Optional start delay. **Position list:** queue several positions, give each its own wait (ms), and save or load the list as a `.json` file. |
 | ⌨️ **Global hotkeys** | **F6** starts/stops the clicker from any app. **F8** saves the current cursor position. |
+| 📦 **Bulk install manager** | After a fresh Windows install, tick your programs (Chrome, VLC, WinRAR, 7-Zip, VS Code... 40 ready-made entries) and let **winget** install them one after another, silently. Search winget to add any package, or add your own **.exe / .msi / .msix setup files** (MSI, Inno Setup and NSIS run silently). With **"Install for me only"** everything goes to `%LOCALAPPDATA%` and **no admin prompt ever appears**; programs that can only be installed as administrator are skipped and marked. Each program's status and a full log are shown in the app. Save the list as `.json` and load it on the new install. |
 | ⏻ **Shutdown timer** | After a countdown ("in 1 hour") or at a set time ("at 23:30"): **shut down, restart, sleep, hibernate, lock or sign out**. Quick picks (15 min, 30 min, 1 h, 2 h), a cancel window in the last minute, optional force-close. |
 | ☀️ **Keep awake** | Stops the PC from sleeping and the screen from turning off, indefinitely or for a number of minutes. Can nudge the mouse by 1 px every minute. |
 | 🔔 **Reminders** | One-off or repeating on-screen notifications, e.g. "take a break in 30 minutes". |
@@ -121,6 +134,17 @@ Requirements: Windows 10 or 11 (the .NET Framework 4.8 it needs ships with Windo
 The clicker skips clicks that would land on the Companian window, so it can never press its own Start/Stop button.
 Windows does not let a normal-rights program send clicks to windows that run **as administrator** (UIPI).
 
+**Position list:** choose *A list of positions (click in order)*, point at each target and press **F8**. Each step has its own button, single/double click and wait after the click (ms). Keep the list with *Save (.json)* and bring it back with *Load (.json)*.
+
+#### Bulk install
+
+1. On the **Bulk Install** page tick the programs you want. If one is missing, find it with *Search winget*, or pick your own `.exe` / `.msi` / `.msix` files with *Add setup files*.
+2. Leave **Install for me only** on: packages install with `--scope user` and no installer can open a UAC prompt. Programs that can only be installed as administrator are skipped and shown as *"Needs admin rights"*.
+3. Press **Install selected**. Programs install one after another in the background; each one's status is in the list and the details are in the *Log*.
+4. Before reinstalling Windows, *Save list (.json)* to another drive or a USB stick; on the new system open Companian, *Load list* and install everything in one click.
+
+winget ships with *App Installer* on Windows 10 (1809+) and 11. If it is missing, Companian offers to open its Microsoft Store page.
+
 ### Building from source
 
 No Visual Studio or .NET SDK needed; it uses the C# compiler that ships with Windows:
@@ -138,6 +162,8 @@ src/
   Program.cs     entry point, single instance, --tray / --uninstall switches
   MainForm.cs    the window and all pages
   Clicker.cs     background click engine (SendInput, ms timing)
+  Sequence.cs    click-position lists, .json save / load
+  Setup.cs       bulk install: winget + setup files, program catalog, .json lists
   Power.cs       shutdown / restart / sleep / lock, keep-awake
   Installer.cs   per-user install, shortcuts, autostart (HKCU only)
   Lang.cs        translations (tr, en, de, es)

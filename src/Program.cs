@@ -8,16 +8,16 @@ using System.Windows.Forms;
 [assembly: AssemblyCompany("nedimdmir")]
 [assembly: AssemblyProduct("Companian")]
 [assembly: AssemblyCopyright("Copyright © 2026 nedimdmir")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
-[assembly: AssemblyInformationalVersion("1.0.0")]
+[assembly: AssemblyVersion("1.1.0.0")]
+[assembly: AssemblyFileVersion("1.1.0.0")]
+[assembly: AssemblyInformationalVersion("1.1.0")]
 
 namespace Companian
 {
     internal static class AppInfo
     {
         public const string Name = "Companian";
-        public const string Version = "1.0.0";
+        public const string Version = "1.1.0";
         public const string Publisher = "nedimdmir";
         public const string RepoUrl = "https://github.com/nedimdmir/Companian";
         public const string Description = "Auto clicker, shutdown timer, keep-awake and reminders for Windows";

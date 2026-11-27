@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.1.0 — 2026-11-27
+
+- New **Bulk Install Manager** page. Tick programs from a catalog of 40 popular apps, search winget
+  for any other package, or add your own .exe / .msi / .msix setup files; they install one after
+  another in the background with per-program status and a live log. "Install for me only" uses
+  winget's user scope and never lets an installer open a UAC prompt; programs that need admin
+  rights are skipped and marked. MSI, Inno Setup and NSIS installers are detected and run silently.
+  Save / load the list as `.json` to reuse it after reinstalling Windows.
+- List columns now scale with the display DPI.
+- Auto clicker: new "list of positions" mode. Queue any number of positions, each with its own
+  button, single/double click and wait (ms) after the click; reorder, edit and remove steps.
+  F8 adds the cursor position as a new step. Repeat the list a set number of rounds, for a
+  duration, or forever. Save and load the list as a `.json` file; the list is also remembered
+  between runs.
+
 ## 1.0.0 — 2026-11-27
 
 First release.

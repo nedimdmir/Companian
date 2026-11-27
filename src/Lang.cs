@@ -63,6 +63,7 @@ namespace Companian
             A("nav_shutdown", "Kapatma Zamanlayıcı", "Shutdown Timer", "Herunterfahr-Timer", "Apagado programado");
             A("nav_awake", "Uyanık Tut", "Keep Awake", "Wach halten", "Mantener activo");
             A("nav_reminder", "Hatırlatıcı", "Reminders", "Erinnerungen", "Recordatorios");
+            A("nav_setup", "Toplu Kurulum", "Bulk Install", "Massen-Setup", "Instalación masiva");
             A("nav_settings", "Ayarlar", "Settings", "Einstellungen", "Ajustes");
 
             // Units
@@ -112,6 +113,134 @@ namespace Companian
                 "Das Klickintervall muss mindestens 1 ms betragen.", "El intervalo debe ser de al menos 1 ms.");
             A("clk_hotkey_fail", "{0} kısayolu başka bir program tarafından kullanılıyor.", "The {0} hotkey is already used by another program.",
                 "Das Tastenkürzel {0} wird bereits von einem anderen Programm verwendet.", "El atajo {0} ya lo usa otro programa.");
+
+            // Click sequence
+            A("clk_pos_sequence", "Konum listesi (sırayla tıkla)", "A list of positions (click in order)",
+                "Positionsliste (der Reihe nach klicken)", "Lista de posiciones (clic en orden)");
+            A("seq_card", "Tıklama sırası", "Click sequence", "Klickfolge", "Secuencia de clics");
+            A("seq_col_no", "#", "#", "#", "#");
+            A("seq_col_x", "X", "X", "X", "X");
+            A("seq_col_y", "Y", "Y", "Y", "Y");
+            A("seq_col_button", "Tuş", "Button", "Taste", "Botón");
+            A("seq_col_type", "Tür", "Type", "Art", "Tipo");
+            A("seq_col_delay", "Sonra bekle", "Wait after", "Danach warten", "Esperar después");
+            A("seq_delay", "Tıklamadan sonra bekle:", "Wait after the click:", "Nach dem Klick warten:", "Esperar tras el clic:");
+            A("seq_add", "Listeye ekle", "Add to list", "Hinzufügen", "Añadir");
+            A("seq_update", "Seçiliyi güncelle", "Update selected", "Auswahl ändern", "Actualizar selección");
+            A("seq_remove", "Sil", "Remove", "Entfernen", "Quitar");
+            A("seq_clear", "Temizle", "Clear", "Leeren", "Vaciar");
+            A("seq_up", "▲ Yukarı", "▲ Up", "▲ Hoch", "▲ Subir");
+            A("seq_down", "▼ Aşağı", "▼ Down", "▼ Runter", "▼ Bajar");
+            A("seq_save", "Kaydet (.json)...", "Save (.json)...", "Speichern (.json)...", "Guardar (.json)...");
+            A("seq_load", "Yükle (.json)...", "Load (.json)...", "Laden (.json)...", "Cargar (.json)...");
+            A("seq_save_title", "Tıklama sırasını kaydet", "Save click sequence", "Klickfolge speichern", "Guardar secuencia de clics");
+            A("seq_load_title", "Tıklama sırası yükle", "Load click sequence", "Klickfolge laden", "Cargar secuencia de clics");
+            A("seq_hint", "F8 imlecin olduğu yeri yukarıdaki tuş, tür ve bekleme ile listeye yeni adım olarak ekler. Bekleme, o adımdaki tıklamadan sonra uygulanır.",
+                "F8 adds the cursor position as a new step, using the button, type and wait above. The wait happens after that step's click.",
+                "F8 fügt die Mausposition als neuen Schritt mit Taste, Art und Wartezeit von oben hinzu. Gewartet wird nach dem Klick dieses Schritts.",
+                "F8 añade la posición del cursor como un paso nuevo, con el botón, tipo y espera de arriba. La espera ocurre tras el clic de ese paso.");
+            A("seq_info", "{0} adım · bir tur ≈ {1}", "{0} steps · one round ≈ {1}", "{0} Schritte · eine Runde ≈ {1}", "{0} pasos · una vuelta ≈ {1}");
+            A("seq_info_empty", "Liste boş. İmleci bir yere götürüp F8'e bas.", "The list is empty. Point at a spot and press F8.",
+                "Die Liste ist leer. Zeig auf eine Stelle und drück F8.", "La lista está vacía. Señala un punto y pulsa F8.");
+            A("seq_rep_rounds", "Listeyi belirli sayıda tekrarla:", "Repeat the list a set number of times:",
+                "Liste feste Anzahl wiederholen:", "Repetir la lista un número de veces:");
+            A("seq_running", "Çalışıyor: tur {0} · adım {1}/{2} · {3} tıklama", "Running: round {0} · step {1}/{2} · {3} clicks",
+                "Läuft: Runde {0} · Schritt {1}/{2} · {3} Klicks", "En marcha: vuelta {0} · paso {1}/{2} · {3} clics");
+            A("seq_empty", "Tıklama listesi boş. Önce en az bir konum ekle (F8).", "The click list is empty. Add at least one position first (F8).",
+                "Die Klickliste ist leer. Füge zuerst mindestens eine Position hinzu (F8).", "La lista está vacía. Añade antes al menos una posición (F8).");
+            A("seq_zero_delay", "Listedeki bekleme sürelerinin toplamı en az 1 ms olmalı.", "The waits in the list must add up to at least 1 ms.",
+                "Die Wartezeiten der Liste müssen zusammen mindestens 1 ms ergeben.", "Las esperas de la lista deben sumar al menos 1 ms.");
+            A("seq_clear_confirm", "Listedeki tüm adımlar silinsin mi?", "Remove all steps from the list?",
+                "Alle Schritte aus der Liste entfernen?", "¿Quitar todos los pasos de la lista?");
+            A("seq_load_fail", "Dosya yüklenemedi:\n{0}", "Could not load the file:\n{0}", "Datei konnte nicht geladen werden:\n{0}", "No se pudo cargar el archivo:\n{0}");
+            A("seq_err_json", "Geçerli bir JSON dosyası değil.", "This is not a valid JSON file.", "Keine gültige JSON-Datei.", "No es un archivo JSON válido.");
+            A("seq_err_nosteps", "Dosyada \"steps\" listesi bulunamadı.", "The file has no \"steps\" list.", "Die Datei enthält keine \"steps\"-Liste.", "El archivo no tiene una lista \"steps\".");
+            A("seq_err_step", "{0}. adım geçersiz (x, y, button, clicks, delay_ms).", "Step {0} is invalid (x, y, button, clicks, delay_ms).",
+                "Schritt {0} ist ungültig (x, y, button, clicks, delay_ms).", "El paso {0} no es válido (x, y, button, clicks, delay_ms).");
+
+            // Bulk install
+            A("nav_setup_title", "Toplu Kurulum Yöneticisi", "Bulk Install Manager", "Massen-Installationsmanager", "Gestor de instalación masiva");
+            A("su_sub", "Seçtiğin programları winget ve kendi kurulum dosyalarınla sırayla kurar. Format sonrası tek tıkla hazır ol.",
+                "Installs the programs you pick one after another, with winget or your own setup files. Be ready in one click after a fresh install.",
+                "Installiert die gewählten Programme nacheinander, per winget oder mit eigenen Setup-Dateien. Nach einer Neuinstallation mit einem Klick bereit.",
+                "Instala uno tras otro los programas que elijas, con winget o con tus propios instaladores. Listo en un clic tras formatear.");
+            A("su_start", "Seçilenleri kur", "Install selected", "Auswahl installieren", "Instalar selección");
+            A("su_stop", "Durdur", "Stop", "Stopp", "Detener");
+            A("su_idle", "{0} program seçili.", "{0} programs selected.", "{0} Programme ausgewählt.", "{0} programas seleccionados.");
+            A("su_running", "Kuruluyor {0}/{1}: {2}", "Installing {0}/{1}: {2}", "Installiere {0}/{1}: {2}", "Instalando {0}/{1}: {2}");
+            A("su_stopping", "{0} bitince duracak...", "Stopping after {0}...", "Stoppt nach {0}...", "Se detendrá tras {0}...");
+            A("su_summary", "Bitti: {0} kuruldu · {1} zaten vardı · {2} kurulamadı", "Done: {0} installed · {1} already there · {2} not installed",
+                "Fertig: {0} installiert · {1} schon vorhanden · {2} nicht installiert", "Listo: {0} instalados · {1} ya estaban · {2} sin instalar");
+            A("su_nothing", "Listede seçili program yok.", "No programs are selected.", "Keine Programme ausgewählt.", "No hay programas seleccionados.");
+            A("su_no_winget", "winget (Windows Paket Yöneticisi) bulunamadı. Microsoft Store'daki \"Uygulama Yükleyicisi\" ile gelir.\n\nMağaza sayfası açılsın mı?",
+                "winget (Windows Package Manager) was not found. It comes with \"App Installer\" from the Microsoft Store.\n\nOpen the Store page?",
+                "winget (Windows-Paket-Manager) wurde nicht gefunden. Es kommt mit dem \"App-Installer\" aus dem Microsoft Store.\n\nStore-Seite öffnen?",
+                "No se encontró winget (Administrador de paquetes de Windows). Viene con \"Instalador de aplicación\" de Microsoft Store.\n\n¿Abrir la página de la Store?");
+            A("su_no_winget_short", "winget bulunamadı.", "winget was not found.", "winget wurde nicht gefunden.", "No se encontró winget.");
+            A("su_card_list", "Kurulacak programlar", "Programs to install", "Zu installierende Programme", "Programas a instalar");
+            A("su_col_name", "Program", "Program", "Programm", "Programa");
+            A("su_col_source", "Kaynak", "Source", "Quelle", "Origen");
+            A("su_col_status", "Durum", "Status", "Status", "Estado");
+            A("su_col_id", "Winget kimliği", "Winget ID", "Winget-ID", "ID de winget");
+            A("su_col_version", "Sürüm", "Version", "Version", "Versión");
+            A("su_all", "Tümünü seç", "Select all", "Alle", "Todos");
+            A("su_none_btn", "Hiçbiri", "None", "Keine", "Ninguno");
+            A("su_save", "Listeyi kaydet (.json)...", "Save list (.json)...", "Liste speichern (.json)...", "Guardar lista (.json)...");
+            A("su_load", "Liste yükle (.json)...", "Load list (.json)...", "Liste laden (.json)...", "Cargar lista (.json)...");
+            A("su_save_title", "Kurulum listesini kaydet", "Save install list", "Installationsliste speichern", "Guardar lista de instalación");
+            A("su_load_title", "Kurulum listesi yükle", "Load install list", "Installationsliste laden", "Cargar lista de instalación");
+            A("su_default_file", "kurulum-listesi.json", "install-list.json", "installationsliste.json", "lista-instalacion.json");
+            A("su_list_hint", "İpucu: listeyi format atmadan önce D: sürücüsüne ya da USB belleğe kaydet; yeni kurulumda yükleyip tek tıkla kur.",
+                "Tip: save the list to another drive or a USB stick before you reinstall Windows, then load it and install everything in one click.",
+                "Tipp: Speichere die Liste vor der Neuinstallation auf einem anderen Laufwerk oder USB-Stick, lade sie danach und installiere alles mit einem Klick.",
+                "Consejo: guarda la lista en otra unidad o en un USB antes de reinstalar Windows; luego cárgala e instala todo en un clic.");
+            A("su_card_add", "Listeye program ekle", "Add programs to the list", "Programme hinzufügen", "Añadir programas");
+            A("su_search_label", "winget'te ara:", "Search winget:", "In winget suchen:", "Buscar en winget:");
+            A("su_search", "Ara", "Search", "Suchen", "Buscar");
+            A("su_searching", "Aranıyor...", "Searching...", "Suche...", "Buscando...");
+            A("su_no_results", "Sonuç bulunamadı.", "No results.", "Keine Ergebnisse.", "Sin resultados.");
+            A("su_add_winget", "Seçileni listeye ekle", "Add selected to the list", "Auswahl hinzufügen", "Añadir selección");
+            A("su_search_hint", "Bir sonucu çift tıklayarak da ekleyebilirsin. Kimliği biliyorsan (ör. Google.Chrome) arama kutusuna yazıp doğrudan ekle.",
+                "You can also double-click a result. If you know the ID (e.g. Google.Chrome), type it in the box and add it directly.",
+                "Du kannst ein Ergebnis auch doppelklicken. Kennst du die ID (z. B. Google.Chrome), tippe sie ein und füge sie direkt hinzu.",
+                "También puedes hacer doble clic en un resultado. Si conoces el ID (p. ej. Google.Chrome), escríbelo y añádelo directamente.");
+            A("su_add_file", "Kurulum dosyası ekle (.exe / .msi / .msix)...", "Add setup files (.exe / .msi / .msix)...",
+                "Setup-Dateien hinzufügen (.exe / .msi / .msix)...", "Añadir instaladores (.exe / .msi / .msix)...");
+            A("su_add_file_title", "Kurulum dosyalarını seç", "Choose setup files", "Setup-Dateien auswählen", "Elegir instaladores");
+            A("su_args", "Parametreler:", "Arguments:", "Parameter:", "Parámetros:");
+            A("su_args_apply", "Uygula", "Apply", "Übernehmen", "Aplicar");
+            A("su_file_hint", "MSI, Inno Setup ve NSIS kurulumları tanınır ve sessiz kurulur. Tanınmayan bir .exe kendi penceresini açar; sessiz kurulum parametresini biliyorsan listeden seçip buraya yaz.",
+                "MSI, Inno Setup and NSIS installers are detected and run silently. An unknown .exe opens its own window; if you know its silent switch, select it in the list and enter it here.",
+                "MSI-, Inno-Setup- und NSIS-Installer werden erkannt und still ausgeführt. Eine unbekannte .exe öffnet ihr eigenes Fenster; kennst du den Silent-Schalter, wähle sie aus und trage ihn hier ein.",
+                "Los instaladores MSI, Inno Setup y NSIS se detectan y se ejecutan en silencio. Un .exe desconocido abre su propia ventana; si conoces su parámetro silencioso, selecciónalo y escríbelo aquí.");
+            A("su_user_only", "Yalnızca benim için kur (yönetici izni sorma)", "Install for me only (never ask for admin rights)",
+                "Nur für mich installieren (nie nach Adminrechten fragen)", "Instalar solo para mí (sin pedir permisos de administrador)");
+            A("su_user_hint", "Programlar kullanıcı kapsamında, %LOCALAPPDATA% altına kurulur ve UAC penceresi açılmaz. Yalnızca yönetici izniyle kurulabilen programlar atlanır ve listede \"Yönetici izni gerekiyor\" olarak gösterilir. Bu seçeneği kapatırsan programlar tüm bilgisayara kurulur ve Windows izin isteyebilir.",
+                "Programs are installed in user scope under %LOCALAPPDATA% and no UAC prompt appears. Programs that can only be installed with admin rights are skipped and marked \"Needs admin rights\". Turn this off to install for all users; Windows may then ask for permission.",
+                "Programme werden im Benutzerbereich unter %LOCALAPPDATA% installiert, ohne UAC-Abfrage. Programme, die nur mit Adminrechten installierbar sind, werden übersprungen und als \"Adminrechte nötig\" markiert. Ausgeschaltet wird für alle Benutzer installiert; Windows fragt dann evtl. nach.",
+                "Los programas se instalan para tu usuario en %LOCALAPPDATA% sin aviso de UAC. Los que solo se pueden instalar como administrador se omiten y se marcan \"Requiere administrador\". Desactívalo para instalar para todos; Windows podría pedir permiso.");
+            A("su_card_log", "Kayıt", "Log", "Protokoll", "Registro");
+            A("su_log_start", "{0} program kurulacak", "installing {0} programs", "{0} Programme werden installiert", "se instalarán {0} programas");
+            A("su_exit_confirm", "Toplu kurulum sürüyor; çıkarsan sıradaki programlar kurulmayacak. Yine de çıkılsın mı?",
+                "A bulk install is running; if you exit, the remaining programs will not be installed. Exit anyway?",
+                "Eine Massen-Installation läuft; beim Beenden werden die restlichen Programme nicht installiert. Trotzdem beenden?",
+                "Hay una instalación en curso; si sales, no se instalarán los programas restantes. ¿Salir de todos modos?");
+            A("su_err_noitems", "Dosyada \"items\" listesi bulunamadı.", "The file has no \"items\" list.", "Die Datei enthält keine \"items\"-Liste.", "El archivo no tiene una lista \"items\".");
+            A("su_err_item", "{0}. öğe geçersiz (\"winget\" ya da \"file\" gerekli).", "Item {0} is invalid (needs \"winget\" or \"file\").",
+                "Eintrag {0} ist ungültig (\"winget\" oder \"file\" nötig).", "El elemento {0} no es válido (requiere \"winget\" o \"file\").");
+            A("su_st_waiting", "Sırada", "Queued", "Wartet", "En cola");
+            A("su_st_running", "Kuruluyor...", "Installing...", "Wird installiert...", "Instalando...");
+            A("su_st_installed", "✓ Kuruldu", "✓ Installed", "✓ Installiert", "✓ Instalado");
+            A("su_st_installedrestart", "✓ Kuruldu (yeniden başlat)", "✓ Installed (restart)", "✓ Installiert (Neustart)", "✓ Instalado (reiniciar)");
+            A("su_st_alreadyinstalled", "✓ Zaten kurulu", "✓ Already installed", "✓ Bereits installiert", "✓ Ya instalado");
+            A("su_st_needsadmin", "Yönetici izni gerekiyor, atlandı", "Needs admin rights, skipped", "Adminrechte nötig, übersprungen", "Requiere administrador, omitido");
+            A("su_st_notfound", "winget'te bulunamadı", "Not found in winget", "In winget nicht gefunden", "No está en winget");
+            A("su_st_filemissing", "Dosya bulunamadı", "File not found", "Datei nicht gefunden", "Archivo no encontrado");
+            A("su_st_inuse", "Program açık, kapatıp tekrar dene", "Program is running, close it and retry", "Programm läuft, schließen und erneut versuchen", "El programa está abierto; ciérralo y reintenta");
+            A("su_st_nonetwork", "İnternet bağlantısı yok", "No internet connection", "Keine Internetverbindung", "Sin conexión a internet");
+            A("su_st_failed", "Hata", "Failed", "Fehler", "Error");
+            A("su_st_timedout", "Zaman aşımı", "Timed out", "Zeitüberschreitung", "Tiempo agotado");
+            A("su_st_skipped", "Durduruldu", "Stopped", "Gestoppt", "Detenido");
 
             // Shutdown timer
             A("sd_sub", "Süre dolunca bilgisayarı kapatır, yeniden başlatır veya uyutur.",
