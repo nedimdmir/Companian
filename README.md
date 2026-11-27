@@ -59,6 +59,10 @@ Companian normal kullanımda yönetici (UAC) izni istemez:
 En son sürüm: **[Releases](https://github.com/nedimdmir/Companian/releases/latest)** sayfasından `Companian.exe`.
 Gereksinim: Windows 10 veya 11 (gerekli .NET Framework 4.8 zaten Windows'ta yüklü gelir).
 
+### Türev sürümler ve atıf
+
+Companian'ı temel alarak kendi sürümünü yayımlıyorsan, README'nde veya uygulamanın hakkında bölümünde **Companian by Nedim Demir** adına ve [orijinal depoya](https://github.com/nedimdmir/Companian) belirgin biçimde atıfta bulun. Dağıtımında MIT lisansını ve telif bildirimini de koru (`LICENSE`).
+
 ### Kullanım ipuçları
 
 1. **Otomatik Tıklayıcı** sekmesinde konumu seç: *İmlecin bulunduğu yer* ya da *Sabit konum*. Sabit konum için **F8**'e bas veya *Konum seç (3 sn)* düğmesine tıklayıp 3 saniye içinde imleci hedefe götür.
@@ -122,6 +126,10 @@ Companian does not ask for administrator (UAC) rights during normal use:
 
 Get `Companian.exe` from the **[latest release](https://github.com/nedimdmir/Companian/releases/latest)**.
 Requirements: Windows 10 or 11 (the .NET Framework 4.8 it needs ships with Windows).
+
+### Forks and attribution
+
+If you publish a version based on Companian, prominently credit **Companian by Nedim Demir** in your README or app's About page and link to the [original repository](https://github.com/nedimdmir/Companian). Keep the MIT license and copyright notice (`LICENSE`) with your distribution.
 
 <p align="center">
   <img src="docs/clicker-en-light.png" width="49%" alt="Auto clicker, light theme">
