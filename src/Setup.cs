@@ -355,11 +355,19 @@ namespace Companian
         {
             try
             {
-                using (Process p = Process.Start(Hidden("winget", "--version")))
+                ProcessStartInfo info = new ProcessStartInfo("winget", "--version")
                 {
-                    p.StandardOutput.ReadToEnd();
-                    p.WaitForExit(15000);
-                    return p.HasExited && p.ExitCode == 0;
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                };
+                using (Process p = Process.Start(info))
+                {
+                    if (!p.WaitForExit(5000))
+                    {
+                        try { p.Kill(); } catch (InvalidOperationException) { } catch (Win32Exception) { }
+                        return false;
+                    }
+                    return p.ExitCode == 0;
                 }
             }
             catch (Win32Exception) { return false; }

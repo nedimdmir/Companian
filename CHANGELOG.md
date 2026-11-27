@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.5.0 — 2026-11-27
+
+- Show the language picker once for existing profiles when upgrading, with language names and
+  instructions visible in multiple languages.
+- Check winget availability off the UI thread with a short timeout to keep slower PCs responsive.
+- Reduce duplicate first-run list work, pause cursor polling while minimized and add clearer card
+  headings with a small brand accent.
+
 ## 1.4.0 — 2026-11-27
 
 - Ask users to choose a language the first time the app starts and remember their selection.

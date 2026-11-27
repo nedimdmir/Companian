@@ -114,6 +114,7 @@ namespace Companian
         private CheckBox chkUserOnly;
         private bool setupFilling;
         private bool setupRan;
+        private bool checkingWinget;
         private NumericUpDown nRmMin;
         private CheckBox chkRmRepeat, chkRmSound;
         private ListView lvRm;
@@ -157,8 +158,8 @@ namespace Companian
             MinimumSize = new Size(940, 620);
 
             loading = true;
-            ApplyTexts();
             LoadSettings();
+            ApplyTexts(false);
             loading = false;
             ApplyTheme(settings.Get("theme", "dark") != "light");
             SelectPage(Math.Max(0, Math.Min(pages.Count - 1, settings.GetInt("page", 0))));
@@ -302,11 +303,13 @@ namespace Companian
             p.Paint += delegate(object sender, PaintEventArgs e)
             {
                 if (theme == null || p.Width < 2 || p.Height < 2) return;
+                using (SolidBrush accent = new SolidBrush(theme.Accent))
+                    e.Graphics.FillRectangle(accent, 0, 0, 3, p.Height);
                 using (Pen border = new Pen(theme.Border))
                     e.Graphics.DrawRectangle(border, 0, 0, p.Width - 1, p.Height - 1);
             };
             if (titleKey != null)
-                p.Controls.Add(Bind(new Label { AutoSize = true, Font = Fonts.Bold, Margin = new Padding(0, 0, 0, 6) }, titleKey));
+                p.Controls.Add(Bind(new Label { AutoSize = true, Font = Fonts.Bold, Tag = "accenttext", Margin = new Padding(0, 0, 0, 8) }, titleKey));
             p.Controls.AddRange(rows);
             return p;
         }
@@ -466,8 +469,14 @@ namespace Companian
         private void UpdateLiveTimer()
         {
             if (fastTimer == null) return;
-            if (Visible && pages.Count > 0 && pages[0].Visible) fastTimer.Start();
+            if (Visible && WindowState != FormWindowState.Minimized && pages.Count > 0 && pages[0].Visible) fastTimer.Start();
             else fastTimer.Stop();
+        }
+
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
+            UpdateLiveTimer();
         }
 
         protected override void OnVisibleChanged(EventArgs e)
@@ -765,7 +774,7 @@ namespace Companian
             lvSetup.Columns.Add("", 195);
             lvSetup.Columns.Add("", 195);
             lvSetup.Columns.Add("", 205);
-            lvSetup.ItemCheck += delegate(object s, ItemCheckEventArgs e) { if (setup.IsRunning && !setupFilling) e.NewValue = e.CurrentValue; };
+            lvSetup.ItemCheck += delegate(object s, ItemCheckEventArgs e) { if ((setup.IsRunning || checkingWinget) && !setupFilling) e.NewValue = e.CurrentValue; };
             lvSetup.ItemChecked += delegate(object s, ItemCheckedEventArgs e)
             {
                 if (setupFilling || e.Item.Index >= setupItems.Count) return;
@@ -773,7 +782,7 @@ namespace Companian
                 UpdateSetupUi();
             };
             lvSetup.SelectedIndexChanged += delegate { OnSetupSelected(); };
-            lvSetup.KeyDown += delegate(object s, KeyEventArgs e) { if (e.KeyCode == Keys.Delete && !setup.IsRunning) RemoveSetupItems(); };
+            lvSetup.KeyDown += delegate(object s, KeyEventArgs e) { if (e.KeyCode == Keys.Delete && !setup.IsRunning && !checkingWinget) RemoveSetupItems(); };
 
             Button all = SmallBtn("su_all");
             all.Click += delegate { CheckAllSetup(true); };
@@ -902,11 +911,11 @@ namespace Companian
         {
             bool was = loading;
             loading = true;
-            ApplyTexts();
+            ApplyTexts(true);
             loading = was;
         }
 
-        private void ApplyTexts()
+        private void ApplyTexts(bool refreshRows)
         {
             foreach (KeyValuePair<Control, string> kv in texts)
                 kv.Key.Text = Lang.T(kv.Value);
@@ -930,12 +939,12 @@ namespace Companian
             string[] srCols = { "su_col_name", "su_col_id", "su_col_version" };
             for (int i = 0; i < srCols.Length; i++)
                 lvSearch.Columns[i].Text = Lang.T(srCols[i]);
-            RefreshSetupList();
+            if (refreshRows) RefreshSetupList();
 
             string[] seqCols = { "seq_col_no", "seq_col_x", "seq_col_y", "seq_col_button", "seq_col_type", "seq_col_delay" };
             for (int i = 0; i < seqCols.Length; i++)
                 lvSeq.Columns[i].Text = Lang.T(seqCols[i]);
-            RefreshSequenceList(-1);
+            if (refreshRows) RefreshSequenceList(-1);
             UpdateSequenceMode();
 
             for (int i = 0; i < quickButtons.Count; i++)
@@ -1605,11 +1614,15 @@ namespace Companian
         {
             if (btnSetup == null || lblSetupStatus == null) return;
             bool running = setup.IsRunning;
-            btnSetup.Text = Lang.T(running ? "su_stop" : "su_start");
+            bool busy = running || checkingWinget;
+            btnSetup.Text = Lang.T(checkingWinget ? "su_checking_winget" : running ? "su_stop" : "su_start");
+            btnSetup.Enabled = !checkingWinget || running;
             btnSetup.Tag = running ? "danger" : "accent";
             Repaint(btnSetup);
-            foreach (Control c in setupEditors) c.Enabled = !running;
-            txtArgs.Enabled = !running && SelectedSetupFile() != null;
+            foreach (Control c in setupEditors) c.Enabled = !busy;
+            lvSetup.Enabled = !checkingWinget;
+            lvSearch.Enabled = !checkingWinget;
+            txtArgs.Enabled = !busy && SelectedSetupFile() != null;
 
             int checkedCount = 0, total = 0, finished = 0, ok = 0, already = 0, failed = 0;
             SetupItem current = null;
@@ -1625,7 +1638,11 @@ namespace Companian
                 else if (it.Status != SetupStatus.Running && it.Status != SetupStatus.Waiting) failed++;
             }
 
-            if (running)
+            if (checkingWinget)
+            {
+                lblSetupStatus.Text = Lang.T("su_checking_winget");
+            }
+            else if (running)
             {
                 string name = current != null ? current.Name : "";
                 lblSetupStatus.Text = setup.StopRequested
@@ -1644,6 +1661,7 @@ namespace Companian
 
         private void ToggleSetup()
         {
+            if (checkingWinget) return;
             if (setup.IsRunning)
             {
                 setup.Stop();
@@ -1660,18 +1678,35 @@ namespace Companian
             bool needsWinget = queue.Exists(delegate(SetupItem it) { return !it.IsFile; });
             if (needsWinget)
             {
+                checkingWinget = true;
                 Cursor = Cursors.WaitCursor;
-                bool ok = SetupRunner.WingetAvailable();
-                Cursor = Cursors.Default;
-                if (!ok)
+                UpdateSetupUi();
+                System.Threading.ThreadPool.QueueUserWorkItem(delegate
                 {
-                    if (MessageBox.Show(this, Lang.T("su_no_winget"), AppInfo.Name,
-                            MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
-                        OpenUrl("ms-windows-store://pdp/?productid=9NBLGGH4NNS1");
-                    return;
-                }
+                    bool available = SetupRunner.WingetAvailable();
+                    Ui(delegate
+                    {
+                        checkingWinget = false;
+                        Cursor = Cursors.Default;
+                        UpdateSetupUi();
+                        if (!available)
+                        {
+                            if (MessageBox.Show(this, Lang.T("su_no_winget"), AppInfo.Name,
+                                    MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                                OpenUrl("ms-windows-store://pdp/?productid=9NBLGGH4NNS1");
+                            return;
+                        }
+                        StartSetup(queue);
+                    });
+                });
+                return;
             }
 
+            StartSetup(queue);
+        }
+
+        private void StartSetup(List<SetupItem> queue)
+        {
             foreach (SetupItem it in setupItems)
             {
                 it.Status = SetupStatus.None;

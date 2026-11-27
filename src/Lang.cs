@@ -166,6 +166,7 @@ namespace Companian
                 "Instala uno tras otro los programas que elijas, con winget o con tus propios instaladores. Listo en un clic tras formatear.");
             A("su_start", "Seçilenleri kur", "Install selected", "Auswahl installieren", "Instalar selección");
             A("su_stop", "Durdur", "Stop", "Stopp", "Detener");
+            A("su_checking_winget", "winget denetleniyor...", "Checking winget...", "winget wird geprüft...", "Comprobando winget...");
             A("su_idle", "{0} program seçili.", "{0} programs selected.", "{0} Programme ausgewählt.", "{0} programas seleccionados.");
             A("su_running", "Kuruluyor {0}/{1}: {2}", "Installing {0}/{1}: {2}", "Installiere {0}/{1}: {2}", "Instalando {0}/{1}: {2}");
             A("su_stopping", "{0} bitince duracak...", "Stopping after {0}...", "Stoppt nach {0}...", "Se detendrá tras {0}...");
