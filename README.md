@@ -33,14 +33,14 @@
 | | |
 |---|---|
 | 🖱️ **Otomatik tıklayıcı** | İmlecin olduğu yere ya da seçtiğin sabit bir konuma tıklar. Sol / sağ / orta tuş, tek veya çift tık. Tıklama aralığını saat-dakika-saniye-milisaniye olarak ayarla (saniyede kaç tık olacağı anında gösterilir). **Belirli sayıda**, **belirli süre boyunca** veya **sonsuz** tıklama. Başlamadan önce bekleme süresi. **Konum listesi:** birden fazla konumu sıraya ekle, her biri için ayrı bekleme (ms) belirle, listeyi `.json` dosyası olarak kaydet ve tekrar yükle. |
-| ⌨️ **Genel kısayollar** | **F6** her uygulamadayken tıklayıcıyı başlatır/durdurur. **F8** imlecin o anki konumunu kaydeder. |
-| 📦 **Toplu kurulum yöneticisi** | Format sonrası programlarını (Chrome, VLC, WinRAR, 7-Zip, VS Code... 40 hazır program) tek tek kurmak yerine işaretle, **winget** ile sırayla ve sessizce kurulsun. winget'te arama yapıp istediğin paketi ekleyebilir, kendi **.exe / .msi / .msix kurulum dosyalarını** da listeye koyabilirsin (MSI, Inno Setup ve NSIS sessiz kurulur). **"Yalnızca benim için kur"** seçeneğiyle her şey `%LOCALAPPDATA%` altına kurulur ve **yönetici izni sorulmaz**; yalnızca yönetici izniyle kurulabilen programlar atlanıp listede belirtilir. Her programın durumu ve tam kayıt (log) arayüzde görünür. Listeyi `.json` olarak kaydet, yeni kurulumda yükle. |
+| ⌨️ **Genel kısayollar** | **F6** her uygulamadayken tıklayıcıyı başlatır/durdurur. **F8** imleç konumunu kaydeder. Bu tuşlardan biri doluysa **Ctrl+Alt** ile otomatik yedek kısayol denenir. |
+| 📦 **Toplu kurulum yöneticisi** | Format sonrası programlarını (Chrome, VLC, WinRAR, 7-Zip, VS Code... 40 hazır program) tek tek kurmak yerine işaretle, **winget** ile sırayla kurulsun. winget'te arama yapıp istediğin paketi ekleyebilir, kendi **.exe / .msi / .msix / .appx** kurulum dosyalarını da listeye koyabilirsin. Bilinen MSI, Inno Setup ve NSIS kurulumları tanınır; diğer EXE'ler kurulum penceresini açar ve gerekirse parametrelerini girebilirsin. **"Yalnızca benim için kur"** açıkken yönetici isteyenler atlanır; kapalıyken MSI için Windows yönetici onayı isteyebilir. MSIX/APPX Windows tarafından geçerli kullanıcıya kurulur. Her programın durumu ve kayıt (log) görünür. Listeyi `.json` olarak kaydet ve tekrar kullan. |
 | ⏻ **Kapatma zamanlayıcısı** | Geri sayım ("1 saat sonra") ya da belirli bir saat ("23:30'da") sonunda **kapat, yeniden başlat, uyku, hazırda beklet, ekranı kilitle veya oturumu kapat**. Hızlı seçim düğmeleri (15 dk, 30 dk, 1 sa, 2 sa), son 1 dakikada iptal penceresi, isteğe bağlı zorla kapatma. |
 | ☀️ **Uyanık tut** | Bilgisayarın uykuya geçmesini ve ekranın kapanmasını engeller; süresiz ya da belirli dakika boyunca. İsteğe bağlı olarak fareyi dakikada bir 1 piksel oynatır. |
 | 🔔 **Hatırlatıcılar** | "30 dakika sonra mola ver" gibi tek seferlik veya tekrarlayan bildirimler. |
 | 🛡️ **İsteğe bağlı yönetici kısayolu** | Ayarlar'dan bir kez yönetici onayı vererek Görev Zamanlayıcı'ya en yüksek ayrıcalıklı bir görev ekle ve masaüstü kısayoluyla uygulamayı sonraki açılışlarda UAC penceresi olmadan yönetici olarak başlat. |
 | 🌍 **4 dil** | Türkçe, English, Deutsch, Español. Program anında dil değiştirir, ilk açılışta Windows dilini kullanır. |
-| 🎨 **Koyu / açık tema** | Windows 11 koyu başlık çubuğu desteğiyle. |
+| 🎨 **Koyu / açık tema** | Marka renklerine uygun lacivert-mor palet, okunaklı metinler ve Windows 11 koyu başlık çubuğu. |
 | 📥 **Sistem tepsisi** | Kapatınca tepside çalışmaya devam eder; istersen Windows ile birlikte başlar. |
 
 ### Normal kullanım ve isteğe bağlı yönetici kısayolu
@@ -98,13 +98,13 @@ powershell -ExecutionPolicy Bypass -File .\build.ps1
 | | |
 |---|---|
 | 🖱️ **Auto clicker** | Clicks wherever the cursor is, or at a fixed position you pick. Left / right / middle button, single or double click. Set the interval in hours, minutes, seconds and milliseconds (clicks per second are shown live). Click **a set number of times**, **for a duration**, or **forever**. Optional start delay. **Position list:** queue several positions, give each its own wait (ms), and save or load the list as a `.json` file. |
-| ⌨️ **Global hotkeys** | **F6** starts/stops the clicker from any app. **F8** saves the current cursor position. |
-| 📦 **Bulk install manager** | After a fresh Windows install, tick your programs (Chrome, VLC, WinRAR, 7-Zip, VS Code... 40 ready-made entries) and let **winget** install them one after another, silently. Search winget to add any package, or add your own **.exe / .msi / .msix setup files** (MSI, Inno Setup and NSIS run silently). With **"Install for me only"** everything goes to `%LOCALAPPDATA%` and **no admin prompt ever appears**; programs that can only be installed as administrator are skipped and marked. Each program's status and a full log are shown in the app. Save the list as `.json` and load it on the new install. |
+| ⌨️ **Global hotkeys** | **F6** starts/stops the clicker from any app. **F8** saves the cursor position. If either key is busy, **Ctrl+Alt** fallbacks are tried automatically. |
+| 📦 **Bulk install manager** | After a fresh Windows install, tick your programs (Chrome, VLC, WinRAR, 7-Zip, VS Code... 40 ready-made entries) and let **winget** install them one after another. Search winget to add a package, or add **.exe / .msi / .msix / .appx** installer files. Known MSI, Inno Setup and NSIS installers are detected; other EXE files open their own setup window and can take custom arguments. With **"Install for me only"** enabled, packages needing admin rights are skipped; with it disabled, MSI files can request Windows approval. Windows installs MSIX/APPX packages for the current user. Each program's status and log are shown in the app. Save the list as `.json` and reuse it. |
 | ⏻ **Shutdown timer** | After a countdown ("in 1 hour") or at a set time ("at 23:30"): **shut down, restart, sleep, hibernate, lock or sign out**. Quick picks (15 min, 30 min, 1 h, 2 h), a cancel window in the last minute, optional force-close. |
 | ☀️ **Keep awake** | Stops the PC from sleeping and the screen from turning off, indefinitely or for a number of minutes. Can nudge the mouse by 1 px every minute. |
 | 🔔 **Reminders** | One-off or repeating on-screen notifications, e.g. "take a break in 30 minutes". |
 | 🌍 **4 languages** | Türkçe, English, Deutsch, Español. Switches instantly; follows the Windows language on first run. |
-| 🎨 **Dark / light theme** | Including the Windows 11 dark title bar. |
+| 🎨 **Dark / light theme** | Brand-matched navy and violet colors, readable contrast and the Windows 11 dark title bar. |
 | 📥 **System tray** | Keeps running in the tray when closed and can start with Windows. |
 
 ### Normal use and optional administrator shortcut

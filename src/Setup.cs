@@ -521,6 +521,7 @@ namespace Companian
                 // App packages always install for the current user only.
                 exe = Path.Combine(Environment.SystemDirectory, @"WindowsPowerShell\v1.0\powershell.exe");
                 args = "-NoProfile -NonInteractive -Command \"Add-AppxPackage -Path '" + it.FilePath.Replace("'", "''") + "'\"";
+                if (!userOnly) Write("  ! MSIX/AppX packages are installed for the current user only.");
             }
             else
             {
@@ -531,7 +532,37 @@ namespace Companian
 
             bool silent = ext != ".exe" || !string.IsNullOrEmpty(it.Args);
             int code;
-            if (userOnly || ext != ".exe")
+            if (!userOnly && ext == ".msi")
+            {
+                // A machine-wide MSI must be allowed to request elevation; the previous
+                // hidden launch could only fail silently on packages that need admin rights.
+                ProcessStartInfo psi = new ProcessStartInfo(exe, args)
+                {
+                    UseShellExecute = true,
+                    Verb = "runas",
+                    WorkingDirectory = Path.GetDirectoryName(it.FilePath)
+                };
+                try
+                {
+                    using (Process p = Process.Start(psi))
+                    {
+                        if (!WaitInterruptible(p, silent ? SilentTimeoutMs : -1))
+                        {
+                            Set(it, SetupStatus.TimedOut, null);
+                            return;
+                        }
+                        code = p.ExitCode;
+                    }
+                }
+                catch (Win32Exception ex)
+                {
+                    if (ex.NativeErrorCode != 1223) throw;
+                    Set(it, SetupStatus.Skipped, Lang.T("su_uac_cancelled"));
+                    Write("  ! " + Lang.T("su_uac_cancelled"));
+                    return;
+                }
+            }
+            else if (userOnly || ext != ".exe")
             {
                 ProcessStartInfo psi = Hidden(exe, args);
                 psi.WorkingDirectory = Path.GetDirectoryName(it.FilePath);
@@ -548,14 +579,24 @@ namespace Companian
                     UseShellExecute = true,
                     WorkingDirectory = Path.GetDirectoryName(it.FilePath)
                 };
-                using (Process p = Process.Start(psi))
+                try
                 {
-                    if (!WaitInterruptible(p, silent ? SilentTimeoutMs : -1))
+                    using (Process p = Process.Start(psi))
                     {
-                        Set(it, SetupStatus.TimedOut, null);
-                        return;
+                        if (!WaitInterruptible(p, silent ? SilentTimeoutMs : -1))
+                        {
+                            Set(it, SetupStatus.TimedOut, null);
+                            return;
+                        }
+                        code = p.ExitCode;
                     }
-                    code = p.ExitCode;
+                }
+                catch (Win32Exception ex)
+                {
+                    if (ex.NativeErrorCode != 1223) throw;
+                    Set(it, SetupStatus.Skipped, Lang.T("su_uac_cancelled"));
+                    Write("  ! " + Lang.T("su_uac_cancelled"));
+                    return;
                 }
             }
 

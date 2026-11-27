@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.3.0 — 2026-11-27
+
+- Refresh the interface with more spacious cards, a larger working area and coordinated navy/violet
+  dark and light palettes.
+- Improve global hotkey reliability: when F6 or F8 is already taken, try Ctrl+Alt+F6/F8.
+- Fix machine-wide MSI launches so Windows can request administrator approval; a cancelled prompt
+  is reported as a skipped install. Clarify installer file types and MSIX/APPX user scope.
+- Reduce idle work by pausing cursor position updates while the app is hidden or another page is open.
+
 ## 1.2.0 — 2026-11-27
 
 - Settings: add a one-time administrator setup that registers an on-demand, highest-privilege

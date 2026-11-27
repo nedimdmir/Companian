@@ -8,7 +8,7 @@ namespace Companian
     internal sealed class Theme
     {
         public bool Dark;
-        public Color Back, Surface, Nav, NavHover, NavActive, Text, Muted, Accent, Danger, Input, Border, ButtonBack;
+        public Color Back, Surface, Nav, NavHover, NavActive, Text, Muted, Accent, AccentHover, Danger, DangerHover, Input, Border, ButtonBack;
 
         public static Theme Get(bool dark)
         {
@@ -16,33 +16,37 @@ namespace Companian
             t.Dark = dark;
             if (dark)
             {
-                t.Back = Color.FromArgb(30, 31, 36);
-                t.Surface = Color.FromArgb(39, 41, 48);
-                t.Nav = Color.FromArgb(23, 24, 28);
-                t.NavHover = Color.FromArgb(34, 36, 42);
-                t.NavActive = Color.FromArgb(42, 45, 54);
-                t.Text = Color.FromArgb(234, 235, 238);
-                t.Muted = Color.FromArgb(156, 160, 170);
-                t.Accent = Color.FromArgb(79, 140, 255);
-                t.Danger = Color.FromArgb(229, 72, 77);
-                t.Input = Color.FromArgb(50, 53, 62);
-                t.Border = Color.FromArgb(66, 70, 82);
-                t.ButtonBack = Color.FromArgb(52, 55, 65);
+                t.Back = Color.FromArgb(19, 23, 35);
+                t.Surface = Color.FromArgb(29, 35, 51);
+                t.Nav = Color.FromArgb(16, 21, 34);
+                t.NavHover = Color.FromArgb(29, 38, 58);
+                t.NavActive = Color.FromArgb(38, 46, 72);
+                t.Text = Color.FromArgb(239, 241, 250);
+                t.Muted = Color.FromArgb(166, 176, 198);
+                t.Accent = Color.FromArgb(107, 92, 231);
+                t.AccentHover = Color.FromArgb(124, 111, 239);
+                t.Danger = Color.FromArgb(205, 73, 91);
+                t.DangerHover = Color.FromArgb(225, 91, 108);
+                t.Input = Color.FromArgb(23, 29, 44);
+                t.Border = Color.FromArgb(54, 64, 88);
+                t.ButtonBack = Color.FromArgb(43, 52, 73);
             }
             else
             {
-                t.Back = Color.FromArgb(244, 245, 248);
+                t.Back = Color.FromArgb(243, 245, 251);
                 t.Surface = Color.White;
-                t.Nav = Color.FromArgb(232, 234, 239);
-                t.NavHover = Color.FromArgb(222, 225, 232);
-                t.NavActive = Color.FromArgb(212, 217, 228);
-                t.Text = Color.FromArgb(28, 29, 33);
-                t.Muted = Color.FromArgb(95, 99, 110);
-                t.Accent = Color.FromArgb(37, 99, 235);
-                t.Danger = Color.FromArgb(205, 43, 49);
-                t.Input = Color.White;
-                t.Border = Color.FromArgb(200, 204, 214);
-                t.ButtonBack = Color.FromArgb(236, 238, 243);
+                t.Nav = Color.FromArgb(237, 240, 249);
+                t.NavHover = Color.FromArgb(226, 231, 245);
+                t.NavActive = Color.FromArgb(224, 226, 255);
+                t.Text = Color.FromArgb(36, 41, 65);
+                t.Muted = Color.FromArgb(100, 109, 134);
+                t.Accent = Color.FromArgb(82, 71, 205);
+                t.AccentHover = Color.FromArgb(68, 58, 184);
+                t.Danger = Color.FromArgb(190, 57, 75);
+                t.DangerHover = Color.FromArgb(168, 43, 61);
+                t.Input = Color.FromArgb(250, 251, 255);
+                t.Border = Color.FromArgb(213, 219, 235);
+                t.ButtonBack = Color.FromArgb(237, 240, 248);
             }
             return t;
         }
@@ -68,6 +72,7 @@ namespace Companian
             else if (role == "card")
             {
                 c.BackColor = Surface;
+                c.ForeColor = Text;
             }
             else if (c is Button)
             {
@@ -80,6 +85,8 @@ namespace Companian
                     b.BackColor = role == "accent" ? Accent : Danger;
                     b.ForeColor = Color.White;
                     b.FlatAppearance.BorderSize = 0;
+                    b.FlatAppearance.MouseOverBackColor = role == "accent" ? AccentHover : DangerHover;
+                    b.FlatAppearance.MouseDownBackColor = role == "accent" ? ControlPaint.Dark(Accent) : ControlPaint.Dark(Danger);
                 }
                 else
                 {
@@ -87,6 +94,8 @@ namespace Companian
                     b.ForeColor = Text;
                     b.FlatAppearance.BorderSize = 1;
                     b.FlatAppearance.BorderColor = Border;
+                    b.FlatAppearance.MouseOverBackColor = NavHover;
+                    b.FlatAppearance.MouseDownBackColor = NavActive;
                 }
             }
             else if (c is ComboBox)
@@ -100,6 +109,8 @@ namespace Companian
             {
                 c.BackColor = Input;
                 c.ForeColor = Text;
+                ListView list = c as ListView;
+                if (list != null) list.GridLines = false;
             }
             else if (c is LinkLabel)
             {
@@ -134,14 +145,39 @@ namespace Companian
         }
     }
 
+    /// <summary>Uses the same palette for the tray menu as the main window.</summary>
+    internal sealed class ThemeColorTable : ProfessionalColorTable
+    {
+        private readonly Theme theme;
+
+        public ThemeColorTable(Theme theme)
+        {
+            this.theme = theme;
+            UseSystemColors = false;
+        }
+
+        public override Color ToolStripDropDownBackground { get { return theme.Surface; } }
+        public override Color MenuBorder { get { return theme.Border; } }
+        public override Color MenuItemBorder { get { return theme.Accent; } }
+        public override Color MenuItemSelected { get { return theme.NavHover; } }
+        public override Color MenuItemSelectedGradientBegin { get { return theme.NavHover; } }
+        public override Color MenuItemSelectedGradientEnd { get { return theme.NavActive; } }
+        public override Color MenuItemPressedGradientBegin { get { return theme.NavActive; } }
+        public override Color MenuItemPressedGradientEnd { get { return theme.NavActive; } }
+        public override Color ImageMarginGradientBegin { get { return theme.Surface; } }
+        public override Color ImageMarginGradientMiddle { get { return theme.Surface; } }
+        public override Color ImageMarginGradientEnd { get { return theme.Surface; } }
+        public override Color SeparatorDark { get { return theme.Border; } }
+    }
+
     internal static class Fonts
     {
-        public static readonly Font Body = new Font("Segoe UI", 9.75f);
-        public static readonly Font Bold = new Font("Segoe UI Semibold", 10f);
-        public static readonly Font Header = new Font("Segoe UI Semibold", 17f);
+        public static readonly Font Body = new Font("Segoe UI", 10f);
+        public static readonly Font Bold = new Font("Segoe UI Semibold", 10.5f);
+        public static readonly Font Header = new Font("Segoe UI Semibold", 19f);
         public static readonly Font Big = new Font("Segoe UI Light", 30f);
-        public static readonly Font Brand = new Font("Segoe UI Semibold", 15f);
-        public static readonly Font Small = new Font("Segoe UI", 8.5f);
+        public static readonly Font Brand = new Font("Segoe UI Semibold", 16f);
+        public static readonly Font Small = new Font("Segoe UI", 8.75f);
         public static readonly Font Icons = PickIconFont();
 
         private static Font PickIconFont()
@@ -161,6 +197,7 @@ namespace Companian
     {
         private bool hover;
         private bool selected;
+        private bool focused;
         public string Glyph;
         public Theme Theme;
 
@@ -169,7 +206,9 @@ namespace Companian
             SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint |
                      ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
             Cursor = Cursors.Hand;
-            Height = 46;
+            TabStop = true;
+            AccessibleRole = AccessibleRole.PushButton;
+            Height = 50;
             Margin = Padding.Empty;
         }
 
@@ -181,7 +220,24 @@ namespace Companian
 
         protected override void OnMouseEnter(EventArgs e) { hover = true; Invalidate(); base.OnMouseEnter(e); }
         protected override void OnMouseLeave(EventArgs e) { hover = false; Invalidate(); base.OnMouseLeave(e); }
-        protected override void OnTextChanged(EventArgs e) { Invalidate(); base.OnTextChanged(e); }
+        protected override void OnTextChanged(EventArgs e)
+        {
+            AccessibleName = Text;
+            Invalidate();
+            base.OnTextChanged(e);
+        }
+        protected override void OnGotFocus(EventArgs e) { focused = true; Invalidate(); base.OnGotFocus(e); }
+        protected override void OnLostFocus(EventArgs e) { focused = false; Invalidate(); base.OnLostFocus(e); }
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Space)
+            {
+                OnClick(EventArgs.Empty);
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+            }
+            base.OnKeyDown(e);
+        }
 
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -191,7 +247,7 @@ namespace Companian
             if (selected)
             {
                 using (SolidBrush b = new SolidBrush(Theme.Accent))
-                    g.FillRectangle(b, 0, 10, 4, Height - 20);
+                g.FillRectangle(b, 0, 10, 4, Height - 20);
             }
             Color fg = selected ? Theme.Text : Theme.Muted;
             if (Fonts.Icons != null && !string.IsNullOrEmpty(Glyph))
@@ -202,6 +258,9 @@ namespace Companian
             }
             TextRenderer.DrawText(g, Text, selected ? Fonts.Bold : Fonts.Body, new Rectangle(52, 0, Width - 56, Height), fg,
                 TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis);
+            if (focused)
+                ControlPaint.DrawFocusRectangle(g, Rectangle.Inflate(ClientRectangle, -5, -5), Theme.Text,
+                    selected ? Theme.NavActive : Theme.Nav);
         }
     }
 

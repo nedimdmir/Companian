@@ -204,21 +204,22 @@ namespace Companian
                 "You can also double-click a result. If you know the ID (e.g. Google.Chrome), type it in the box and add it directly.",
                 "Du kannst ein Ergebnis auch doppelklicken. Kennst du die ID (z. B. Google.Chrome), tippe sie ein und füge sie direkt hinzu.",
                 "También puedes hacer doble clic en un resultado. Si conoces el ID (p. ej. Google.Chrome), escríbelo y añádelo directamente.");
-            A("su_add_file", "Kurulum dosyası ekle (.exe / .msi / .msix)...", "Add setup files (.exe / .msi / .msix)...",
-                "Setup-Dateien hinzufügen (.exe / .msi / .msix)...", "Añadir instaladores (.exe / .msi / .msix)...");
+            A("su_add_file", "Kurulum dosyası ekle...", "Add installer files...",
+                "Installationsdateien hinzufügen...", "Añadir instaladores...");
             A("su_add_file_title", "Kurulum dosyalarını seç", "Choose setup files", "Setup-Dateien auswählen", "Elegir instaladores");
             A("su_args", "Parametreler:", "Arguments:", "Parameter:", "Parámetros:");
             A("su_args_apply", "Uygula", "Apply", "Übernehmen", "Aplicar");
-            A("su_file_hint", "MSI, Inno Setup ve NSIS kurulumları tanınır ve sessiz kurulur. Tanınmayan bir .exe kendi penceresini açar; sessiz kurulum parametresini biliyorsan listeden seçip buraya yaz.",
-                "MSI, Inno Setup and NSIS installers are detected and run silently. An unknown .exe opens its own window; if you know its silent switch, select it in the list and enter it here.",
-                "MSI-, Inno-Setup- und NSIS-Installer werden erkannt und still ausgeführt. Eine unbekannte .exe öffnet ihr eigenes Fenster; kennst du den Silent-Schalter, wähle sie aus und trage ihn hier ein.",
-                "Los instaladores MSI, Inno Setup y NSIS se detectan y se ejecutan en silencio. Un .exe desconocido abre su propia ventana; si conoces su parámetro silencioso, selecciónalo y escríbelo aquí.");
+            A("su_file_hint", "EXE, MSI, MSIX, MSIXBundle, APPX ve APPXBundle dosyaları eklenebilir. MSI ile bilinen Inno/NSIS EXE'leri otomatik tanınır; diğer EXE'ler kurulum penceresini açar. Sessiz kurulum anahtarını biliyorsan dosyayı seçip Parametreler alanına yaz. Sonuç dosyaya ve Windows uyumluluğuna bağlıdır.",
+                "You can add EXE, MSI, MSIX, MSIXBundle, APPX and APPXBundle files. MSI and known Inno/NSIS EXE installers are detected; other EXE files open their setup window. If you know a silent switch, select the file and enter it under Arguments. Success depends on the installer and Windows compatibility.",
+                "Du kannst EXE-, MSI-, MSIX-, MSIXBundle-, APPX- und APPXBundle-Dateien hinzufügen. MSI und bekannte Inno-/NSIS-EXE-Installer werden erkannt; andere EXE-Dateien öffnen ihr Setup. Bekannte Silent-Schalter kannst du unter Parameter eintragen. Der Erfolg hängt vom Installer und der Windows-Kompatibilität ab.",
+                "Puedes añadir archivos EXE, MSI, MSIX, MSIXBundle, APPX y APPXBundle. Se detectan MSI y los instaladores EXE conocidos de Inno/NSIS; otros EXE abren su propia ventana. Si conoces el parámetro silencioso, selecciónalo e introdúcelo en Parámetros. El resultado depende del instalador y de la compatibilidad con Windows.");
             A("su_user_only", "Yalnızca benim için kur (yönetici izni sorma)", "Install for me only (never ask for admin rights)",
                 "Nur für mich installieren (nie nach Adminrechten fragen)", "Instalar solo para mí (sin pedir permisos de administrador)");
-            A("su_user_hint", "Programlar kullanıcı kapsamında, %LOCALAPPDATA% altına kurulur ve UAC penceresi açılmaz. Yalnızca yönetici izniyle kurulabilen programlar atlanır ve listede \"Yönetici izni gerekiyor\" olarak gösterilir. Bu seçeneği kapatırsan programlar tüm bilgisayara kurulur ve Windows izin isteyebilir.",
-                "Programs are installed in user scope under %LOCALAPPDATA% and no UAC prompt appears. Programs that can only be installed with admin rights are skipped and marked \"Needs admin rights\". Turn this off to install for all users; Windows may then ask for permission.",
-                "Programme werden im Benutzerbereich unter %LOCALAPPDATA% installiert, ohne UAC-Abfrage. Programme, die nur mit Adminrechten installierbar sind, werden übersprungen und als \"Adminrechte nötig\" markiert. Ausgeschaltet wird für alle Benutzer installiert; Windows fragt dann evtl. nach.",
-                "Los programas se instalan para tu usuario en %LOCALAPPDATA% sin aviso de UAC. Los que solo se pueden instalar como administrador se omiten y se marcan \"Requiere administrador\". Desactívalo para instalar para todos; Windows podría pedir permiso.");
+            A("su_user_hint", "Açıkken programlar kullanıcı kapsamına kurulur; yönetici isteyenler atlanır ve UAC açılmaz. Kapalıyken kurulum dosyaları yönetici izni isteyebilir. MSIX/APPX paketleri Windows gereği geçerli kullanıcıya kurulur.",
+                "When enabled, installers use per-user scope; packages that require admin rights are skipped and no UAC prompt appears. When disabled, installer files may request admin rights. Windows installs MSIX/APPX packages for the current user.",
+                "Aktiviert werden Installer im Benutzerbereich ausgeführt; Pakete mit Adminbedarf werden übersprungen und UAC erscheint nicht. Deaktiviert können Installer Adminrechte anfordern. Windows installiert MSIX/APPX für den aktuellen Benutzer.",
+                "Activado, los instaladores usan el ámbito del usuario; se omiten los que requieren administrador y no aparece UAC. Desactivado, los archivos pueden solicitar permisos. Windows instala MSIX/APPX para el usuario actual.");
+            A("su_uac_cancelled", "Yönetici onayı verilmedi; kurulum atlandı.", "Administrator approval was cancelled; installation skipped.", "Administratorbestätigung abgebrochen; Installation übersprungen.", "Se canceló la aprobación; instalación omitida.");
             A("su_card_log", "Kayıt", "Log", "Protokoll", "Registro");
             A("su_log_start", "{0} program kurulacak", "installing {0} programs", "{0} Programme werden installiert", "se instalarán {0} programas");
             A("su_exit_confirm", "Toplu kurulum sürüyor; çıkarsan sıradaki programlar kurulmayacak. Yine de çıkılsın mı?",
@@ -333,10 +334,10 @@ namespace Companian
                 "Beim Schließen im Infobereich weiterlaufen", "Seguir en la bandeja del sistema al cerrar");
             A("st_autostart", "Windows açılınca başlat (tepside)", "Start with Windows (in the tray)",
                 "Mit Windows starten (im Infobereich)", "Iniciar con Windows (en la bandeja)");
-            A("st_hotkeys", "Kısayollar: F6 = tıklayıcıyı başlat/durdur · F8 = imleç konumunu kaydet",
-                "Hotkeys: F6 = start/stop the clicker · F8 = save the cursor position",
-                "Tastenkürzel: F6 = Klicker starten/stoppen · F8 = Mausposition speichern",
-                "Atajos: F6 = iniciar/detener · F8 = guardar la posición del cursor");
+            A("st_hotkeys", "Kısayollar: F6 = başlat/durdur · F8 = konumu kaydet. Tuş doluysa Ctrl+Alt ile otomatik denenir.",
+                "Hotkeys: F6 = start/stop · F8 = save position. If a key is busy, Ctrl+Alt is tried automatically.",
+                "Tasten: F6 = Start/Stopp · F8 = Position speichern. Bei Belegung wird automatisch Ctrl+Alt versucht.",
+                "Atajos: F6 = iniciar/detener · F8 = guardar posición. Si están ocupadas, se prueba Ctrl+Alt automáticamente.");
             A("st_card_install", "Kurulum (yönetici izni gerekmez)", "Installation (no admin rights needed)",
                 "Installation (keine Administratorrechte nötig)", "Instalación (sin permisos de administrador)");
             A("uac_setup_card", "Yönetici kısayolu", "Administrator shortcut", "Administratorkürzel", "Acceso de administrador");

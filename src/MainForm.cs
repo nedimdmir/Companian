@@ -21,7 +21,7 @@ namespace Companian
     {
         private const int HotkeyClicker = 1;
         private const int HotkeyCapture = 2;
-        private const int CardWidth = 590;
+        private const int CardWidth = 660;
 
         private enum ClickerState { Idle, Waiting, Running, Done }
 
@@ -49,6 +49,7 @@ namespace Companian
 
         private Panel content;
         private NotifyIcon tray;
+        private ContextMenuStrip trayMenu;
         private ToolStripMenuItem trayShow, trayClicker, trayExit;
         private Timer secondTimer, fastTimer, pickTimer;
 
@@ -136,7 +137,7 @@ namespace Companian
             Text = AppInfo.Name;
             Font = Fonts.Body;
             StartPosition = FormStartPosition.CenterScreen;
-            ClientSize = new Size(860, 640);
+            ClientSize = new Size(1000, 720);
             appIcon = LoadAppIcon();
             Icon = appIcon;
 
@@ -153,7 +154,7 @@ namespace Companian
             FixNumericMargins(this, CurrentAutoScaleDimensions.Width / 96f);
             ScaleListColumns(this, CurrentAutoScaleDimensions.Width / 96f);
             PerformLayout();
-            MinimumSize = new Size(Width, Math.Min(Height, 480));
+            MinimumSize = new Size(940, 620);
 
             loading = true;
             ApplyTexts();
@@ -172,9 +173,8 @@ namespace Companian
             secondTimer = new Timer { Interval = 1000 };
             secondTimer.Tick += OnSecondTick;
             secondTimer.Start();
-            fastTimer = new Timer { Interval = 150 };
+            fastTimer = new Timer { Interval = 250 };
             fastTimer.Tick += delegate { UpdateLivePosition(); };
-            fastTimer.Start();
             pickTimer = new Timer { Interval = 1000 };
             pickTimer.Tick += OnPickTick;
 
@@ -244,7 +244,7 @@ namespace Companian
 
         private Label Muted(string key)
         {
-            return Bind(new Label { AutoSize = true, Margin = new Padding(0, 4, 0, 2), Tag = "muted", MaximumSize = new Size(CardWidth - 30, 0) }, key);
+            return Bind(new Label { AutoSize = true, Margin = new Padding(0, 4, 0, 2), Tag = "muted", MaximumSize = new Size(CardWidth - 52, 0) }, key);
         }
 
         private static NumericUpDown Num(int min, int max, int value, int width)
@@ -275,8 +275,8 @@ namespace Companian
         {
             return Bind(new Button
             {
-                AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, MinimumSize = new Size(110, 34),
-                Padding = new Padding(10, 0, 10, 0), Margin = new Padding(0, 4, 8, 2), Tag = role
+                AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, MinimumSize = new Size(110, 38),
+                Padding = new Padding(12, 0, 12, 0), Margin = new Padding(0, 5, 10, 3), Tag = role
             }, key);
         }
 
@@ -296,8 +296,14 @@ namespace Companian
             FlowLayoutPanel p = new FlowLayoutPanel
             {
                 AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, WrapContents = false,
-                FlowDirection = FlowDirection.TopDown, Padding = new Padding(14, 10, 14, 12),
-                Margin = new Padding(0, 0, 0, 10), MinimumSize = new Size(CardWidth, 0), Tag = "card"
+                FlowDirection = FlowDirection.TopDown, Padding = new Padding(20, 14, 20, 16),
+                Margin = new Padding(0, 0, 0, 14), MinimumSize = new Size(CardWidth, 0), Tag = "card"
+            };
+            p.Paint += delegate(object sender, PaintEventArgs e)
+            {
+                if (theme == null || p.Width < 2 || p.Height < 2) return;
+                using (Pen border = new Pen(theme.Border))
+                    e.Graphics.DrawRectangle(border, 0, 0, p.Width - 1, p.Height - 1);
             };
             if (titleKey != null)
                 p.Controls.Add(Bind(new Label { AutoSize = true, Font = Fonts.Bold, Margin = new Padding(0, 0, 0, 6) }, titleKey));
@@ -305,12 +311,67 @@ namespace Companian
             return p;
         }
 
+        private void SetupListView(ListView list)
+        {
+            list.OwnerDraw = true;
+            list.GridLines = false;
+            list.DrawColumnHeader += delegate(object sender, DrawListViewColumnHeaderEventArgs e)
+            {
+                if (theme == null) { e.DrawDefault = true; return; }
+                using (SolidBrush fill = new SolidBrush(theme.ButtonBack)) e.Graphics.FillRectangle(fill, e.Bounds);
+                using (Pen line = new Pen(theme.Border))
+                    e.Graphics.DrawLine(line, e.Bounds.Left, e.Bounds.Bottom - 1, e.Bounds.Right, e.Bounds.Bottom - 1);
+                TextRenderer.DrawText(e.Graphics, e.Header.Text, Fonts.Bold,
+                    Rectangle.Inflate(e.Bounds, -10, 0), theme.Text,
+                    TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis | TextFormatFlags.SingleLine);
+            };
+            list.DrawItem += delegate(object sender, DrawListViewItemEventArgs e)
+            {
+                if (list.View != View.Details) e.DrawDefault = true;
+            };
+            list.DrawSubItem += delegate(object sender, DrawListViewSubItemEventArgs e)
+            {
+                if (theme == null) { e.DrawDefault = true; return; }
+                Color rowBack = e.Item.Selected ? theme.NavActive : theme.Input;
+                Color rowText = list.Enabled ? theme.Text : theme.Muted;
+                using (SolidBrush fill = new SolidBrush(rowBack)) e.Graphics.FillRectangle(fill, e.Bounds);
+
+                int left = 9;
+                if (list.CheckBoxes && e.ColumnIndex == 0)
+                {
+                    Rectangle box = new Rectangle(e.Bounds.Left + 6, e.Bounds.Top + (e.Bounds.Height - 14) / 2, 14, 14);
+                    using (SolidBrush fill = new SolidBrush(e.Item.Checked ? theme.Accent : theme.Surface))
+                        e.Graphics.FillRectangle(fill, box);
+                    using (Pen edge = new Pen(e.Item.Checked ? theme.Accent : theme.Border))
+                        e.Graphics.DrawRectangle(edge, box);
+                    if (e.Item.Checked)
+                    {
+                        using (Pen tick = new Pen(Color.White, 2f))
+                        {
+                            e.Graphics.DrawLine(tick, box.Left + 3, box.Top + 7, box.Left + 6, box.Top + 10);
+                            e.Graphics.DrawLine(tick, box.Left + 6, box.Top + 10, box.Left + 12, box.Top + 3);
+                        }
+                    }
+                    left = 27;
+                }
+
+                Rectangle text = Rectangle.FromLTRB(e.Bounds.Left + left, e.Bounds.Top + 1, e.Bounds.Right - 8, e.Bounds.Bottom - 1);
+                TextRenderer.DrawText(e.Graphics, e.SubItem.Text, list.Font, text, rowText,
+                    TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis | TextFormatFlags.SingleLine);
+                if (e.ColumnIndex == list.Columns.Count - 1)
+                {
+                    using (Pen line = new Pen(theme.Border))
+                        e.Graphics.DrawLine(line, e.Bounds.Left, e.Bounds.Bottom - 1, e.Bounds.Right, e.Bounds.Bottom - 1);
+                }
+            };
+        }
+
         private FlowLayoutPanel NewPage(string titleKey, string subtitleKey)
         {
             FlowLayoutPanel p = new FlowLayoutPanel
             {
                 Dock = DockStyle.Fill, FlowDirection = FlowDirection.TopDown, WrapContents = false,
-                AutoScroll = true, Padding = new Padding(26, 20, 16, 16), Visible = false
+                AutoScroll = true, Padding = new Padding(30, 26, 22, 22), Visible = false
             };
             p.Controls.Add(Bind(new Label { AutoSize = true, Font = Fonts.Header, Margin = new Padding(0, 0, 0, 2) }, titleKey));
             p.Controls.Add(Bind(new Label { AutoSize = true, Tag = "muted", Margin = new Padding(2, 0, 0, 12), MaximumSize = new Size(CardWidth, 0) }, subtitleKey));
@@ -361,25 +422,25 @@ namespace Companian
         private void BuildShell()
         {
             content = new Panel { Dock = DockStyle.Fill };
-            Panel nav = new Panel { Dock = DockStyle.Left, Width = 210, Tag = "nav" };
+            Panel nav = new Panel { Dock = DockStyle.Left, Width = 220, Tag = "nav" };
 
             PictureBox logo = new PictureBox
             {
                 Image = new Icon(appIcon, 32, 32).ToBitmap(), SizeMode = PictureBoxSizeMode.Zoom,
-                Location = new Point(18, 22), Size = new Size(32, 32)
+                Location = new Point(22, 24), Size = new Size(36, 36)
             };
-            Label brand = new Label { Text = AppInfo.Name, Font = Fonts.Brand, AutoSize = true, Location = new Point(56, 20) };
-            Label version = new Label { Text = "v" + AppInfo.Version, Font = Fonts.Small, AutoSize = true, Location = new Point(58, 46), Tag = "muted" };
+            Label brand = new Label { Text = AppInfo.Name, Font = Fonts.Brand, AutoSize = true, Location = new Point(68, 23) };
+            Label version = new Label { Text = "v" + AppInfo.Version, Font = Fonts.Small, AutoSize = true, Location = new Point(70, 51), Tag = "muted" };
 
             FlowLayoutPanel list = new FlowLayoutPanel
             {
                 FlowDirection = FlowDirection.TopDown, WrapContents = false,
-                Location = new Point(0, 86), Size = new Size(210, NavKeys.Length * 46 + 4), Tag = "nav"
+                Location = new Point(0, 96), Size = new Size(220, NavKeys.Length * 50 + 4), Tag = "nav"
             };
             for (int i = 0; i < NavKeys.Length; i++)
             {
                 int index = i;
-                NavItem item = new NavItem { Width = 210, Glyph = NavGlyphs[i] };
+                NavItem item = new NavItem { Width = 220, Glyph = NavGlyphs[i] };
                 item.Click += delegate { SelectPage(index); };
                 navItems.Add(item);
                 list.Controls.Add(item);
@@ -399,11 +460,26 @@ namespace Companian
             }
             ActiveControl = null;
             settings.Set("page", index);
+            UpdateLiveTimer();
+        }
+
+        private void UpdateLiveTimer()
+        {
+            if (fastTimer == null) return;
+            if (Visible && pages.Count > 0 && pages[0].Visible) fastTimer.Start();
+            else fastTimer.Stop();
+        }
+
+        protected override void OnVisibleChanged(EventArgs e)
+        {
+            base.OnVisibleChanged(e);
+            UpdateLiveTimer();
         }
 
         private void BuildTray()
         {
             ContextMenuStrip menu = new ContextMenuStrip();
+            trayMenu = menu;
             trayShow = new ToolStripMenuItem();
             trayShow.Font = new Font(menu.Font, FontStyle.Bold);
             trayShow.Click += delegate { ShowFromTray(); };
@@ -496,8 +572,9 @@ namespace Companian
             {
                 View = View.Details, FullRowSelect = true, HideSelection = false, MultiSelect = false,
                 HeaderStyle = ColumnHeaderStyle.Nonclickable, BorderStyle = BorderStyle.FixedSingle,
-                Size = new Size(CardWidth - 28, 190), Margin = new Padding(0, 2, 0, 4)
+                Size = new Size(CardWidth - 40, 190), Margin = new Padding(0, 2, 0, 4)
             };
+            SetupListView(lvSeq);
             foreach (int width in new[] { 40, 80, 80, 100, 110, 120 })
                 lvSeq.Columns.Add("", width);
             lvSeq.SelectedIndexChanged += delegate { OnSequenceSelected(); };
@@ -531,7 +608,7 @@ namespace Companian
             Button load = Btn("seq_load", null);
             load.Click += delegate { LoadSequenceFile(); };
 
-            lblSeqInfo = new Label { AutoSize = true, Tag = "muted", Margin = new Padding(0, 2, 0, 4), MaximumSize = new Size(CardWidth - 30, 0) };
+            lblSeqInfo = new Label { AutoSize = true, Tag = "muted", Margin = new Padding(0, 2, 0, 4), MaximumSize = new Size(CardWidth - 52, 0) };
 
             cardSeq = Card("seq_card",
                 lvSeq,
@@ -653,11 +730,12 @@ namespace Companian
             lvRm = new ListView
             {
                 View = View.Details, FullRowSelect = true, HideSelection = false, HeaderStyle = ColumnHeaderStyle.Nonclickable,
-                BorderStyle = BorderStyle.FixedSingle, Size = new Size(CardWidth - 28, 170), Margin = new Padding(0, 2, 0, 4)
+                BorderStyle = BorderStyle.FixedSingle, Size = new Size(CardWidth - 40, 170), Margin = new Padding(0, 2, 0, 4)
             };
-            lvRm.Columns.Add("", 300);
-            lvRm.Columns.Add("", 110);
-            lvRm.Columns.Add("", 140);
+            SetupListView(lvRm);
+            lvRm.Columns.Add("", 350);
+            lvRm.Columns.Add("", 125);
+            lvRm.Columns.Add("", 125);
             Button remove = Btn("rm_remove", null);
             remove.Click += delegate { RemoveSelectedReminders(); };
             lvRm.KeyDown += delegate(object s, KeyEventArgs e) { if (e.KeyCode == Keys.Delete) RemoveSelectedReminders(); };
@@ -681,11 +759,12 @@ namespace Companian
                 View = View.Details, CheckBoxes = true, FullRowSelect = true, HideSelection = false, MultiSelect = true,
                 ShowItemToolTips = true,
                 HeaderStyle = ColumnHeaderStyle.Nonclickable, BorderStyle = BorderStyle.FixedSingle,
-                Size = new Size(CardWidth - 28, 300), Margin = new Padding(0, 2, 0, 4)
+                Size = new Size(CardWidth - 40, 300), Margin = new Padding(0, 2, 0, 4)
             };
-            lvSetup.Columns.Add("", 175);
-            lvSetup.Columns.Add("", 175);
-            lvSetup.Columns.Add("", 185);
+            SetupListView(lvSetup);
+            lvSetup.Columns.Add("", 195);
+            lvSetup.Columns.Add("", 195);
+            lvSetup.Columns.Add("", 205);
             lvSetup.ItemCheck += delegate(object s, ItemCheckEventArgs e) { if (setup.IsRunning && !setupFilling) e.NewValue = e.CurrentValue; };
             lvSetup.ItemChecked += delegate(object s, ItemCheckedEventArgs e)
             {
@@ -718,11 +797,12 @@ namespace Companian
             {
                 View = View.Details, FullRowSelect = true, HideSelection = false, MultiSelect = true,
                 HeaderStyle = ColumnHeaderStyle.Nonclickable, BorderStyle = BorderStyle.FixedSingle,
-                Size = new Size(CardWidth - 28, 140), Margin = new Padding(0, 2, 0, 4)
+                Size = new Size(CardWidth - 40, 140), Margin = new Padding(0, 2, 0, 4)
             };
-            lvSearch.Columns.Add("", 225);
-            lvSearch.Columns.Add("", 215);
-            lvSearch.Columns.Add("", 95);
+            SetupListView(lvSearch);
+            lvSearch.Columns.Add("", 250);
+            lvSearch.Columns.Add("", 245);
+            lvSearch.Columns.Add("", 100);
             lvSearch.DoubleClick += delegate { AddWingetFromSearch(); };
             Button addWinget = Btn("su_add_winget", "accent");
             addWinget.Click += delegate { AddWingetFromSearch(); };
@@ -754,7 +834,7 @@ namespace Companian
             txtLog = new TextBox
             {
                 Multiline = true, ReadOnly = true, ScrollBars = ScrollBars.Vertical, WordWrap = false,
-                Size = new Size(CardWidth - 28, 160), Margin = new Padding(0, 2, 0, 2),
+                Size = new Size(CardWidth - 40, 160), Margin = new Padding(0, 2, 0, 2),
                 BorderStyle = BorderStyle.FixedSingle, Font = new Font("Consolas", 8.5f)
             };
             Button clearLog = SmallBtn("seq_clear");
@@ -801,7 +881,7 @@ namespace Companian
             btnInstall.Click += delegate { DoInstall(); };
             btnUninstall = Btn("st_uninstall", "danger");
             btnUninstall.Click += delegate { DoUninstall(); };
-            lblInstallState = new Label { AutoSize = true, Tag = "muted", Margin = new Padding(0, 6, 0, 0), MaximumSize = new Size(CardWidth - 30, 0) };
+            lblInstallState = new Label { AutoSize = true, Tag = "muted", Margin = new Padding(0, 6, 0, 0), MaximumSize = new Size(CardWidth - 52, 0) };
             Label desc = Muted("st_install_desc");
             desc.Margin = new Padding(0, 0, 0, 6);
             page.Controls.Add(Card("st_card_install", desc, Row(chkDesk), Row(btnInstall, btnUninstall), lblInstallState));
@@ -881,6 +961,13 @@ namespace Companian
         {
             theme = Theme.Get(dark);
             theme.Apply(this);
+            if (trayMenu != null)
+            {
+                trayMenu.BackColor = theme.Surface;
+                trayMenu.ForeColor = theme.Text;
+                trayMenu.Renderer = new ToolStripProfessionalRenderer(new ThemeColorTable(theme));
+                foreach (ToolStripItem item in trayMenu.Items) item.ForeColor = theme.Text;
+            }
             if (IsHandleCreated) Native.SetDarkTitleBar(Handle, dark);
             UpdateClickerUi();
             UpdateAwakeView();
@@ -1718,7 +1805,7 @@ namespace Companian
         }
 
         private const string InstallerFilter =
-            "Setup (*.exe;*.msi;*.msix;*.msixbundle;*.appx;*.appxbundle)|*.exe;*.msi;*.msix;*.msixbundle;*.appx;*.appxbundle|*.*|*.*";
+            "Installers (*.exe;*.msi;*.msix;*.msixbundle;*.appx;*.appxbundle)|*.exe;*.msi;*.msix;*.msixbundle;*.appx;*.appxbundle";
 
         private void AddSetupFiles()
         {
@@ -1899,10 +1986,17 @@ namespace Companian
         {
             base.OnHandleCreated(e);
             failedHotkeys.Clear();
-            if (!Native.RegisterHotKey(Handle, HotkeyClicker, Native.MOD_NOREPEAT, Native.VK_F6)) failedHotkeys.Add("F6");
-            if (!Native.RegisterHotKey(Handle, HotkeyCapture, Native.MOD_NOREPEAT, Native.VK_F8)) failedHotkeys.Add("F8");
+            RegisterHotkeyWithFallback(HotkeyClicker, Native.VK_F6, "F6");
+            RegisterHotkeyWithFallback(HotkeyCapture, Native.VK_F8, "F8");
             if (theme != null) Native.SetDarkTitleBar(Handle, theme.Dark);
             UpdateClickerUi();
+        }
+
+        private void RegisterHotkeyWithFallback(int id, uint key, string name)
+        {
+            if (Native.RegisterHotKey(Handle, id, Native.MOD_NOREPEAT, key)) return;
+            if (Native.RegisterHotKey(Handle, id, Native.MOD_NOREPEAT | Native.MOD_CONTROL | Native.MOD_ALT, key)) return;
+            failedHotkeys.Add(name + " / Ctrl+Alt+" + name);
         }
 
         protected override void OnHandleDestroyed(EventArgs e)
