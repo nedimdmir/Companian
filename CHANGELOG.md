@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.4.0 — 2026-11-27
+
+- Ask users to choose a language the first time the app starts and remember their selection.
+- Keep the build output folder to a single `Companian.exe` for clear release downloads.
+
 ## 1.3.0 — 2026-11-27
 
 - Refresh the interface with more spacious cards, a larger working area and coordinated navy/violet

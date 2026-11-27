@@ -39,7 +39,7 @@
 | ☀️ **Uyanık tut** | Bilgisayarın uykuya geçmesini ve ekranın kapanmasını engeller; süresiz ya da belirli dakika boyunca. İsteğe bağlı olarak fareyi dakikada bir 1 piksel oynatır. |
 | 🔔 **Hatırlatıcılar** | "30 dakika sonra mola ver" gibi tek seferlik veya tekrarlayan bildirimler. |
 | 🛡️ **İsteğe bağlı yönetici kısayolu** | Ayarlar'dan bir kez yönetici onayı vererek Görev Zamanlayıcı'ya en yüksek ayrıcalıklı bir görev ekle ve masaüstü kısayoluyla uygulamayı sonraki açılışlarda UAC penceresi olmadan yönetici olarak başlat. |
-| 🌍 **4 dil** | Türkçe, English, Deutsch, Español. Program anında dil değiştirir, ilk açılışta Windows dilini kullanır. |
+| 🌍 **4 dil** | İlk açılışta dilini seç: Türkçe, English, Deutsch veya Español. Daha sonra Ayarlar'dan değiştirebilirsin. |
 | 🎨 **Koyu / açık tema** | Marka renklerine uygun lacivert-mor palet, okunaklı metinler ve Windows 11 koyu başlık çubuğu. |
 | 📥 **Sistem tepsisi** | Kapatınca tepside çalışmaya devam eder; istersen Windows ile birlikte başlar. |
 
@@ -103,7 +103,7 @@ powershell -ExecutionPolicy Bypass -File .\build.ps1
 | ⏻ **Shutdown timer** | After a countdown ("in 1 hour") or at a set time ("at 23:30"): **shut down, restart, sleep, hibernate, lock or sign out**. Quick picks (15 min, 30 min, 1 h, 2 h), a cancel window in the last minute, optional force-close. |
 | ☀️ **Keep awake** | Stops the PC from sleeping and the screen from turning off, indefinitely or for a number of minutes. Can nudge the mouse by 1 px every minute. |
 | 🔔 **Reminders** | One-off or repeating on-screen notifications, e.g. "take a break in 30 minutes". |
-| 🌍 **4 languages** | Türkçe, English, Deutsch, Español. Switches instantly; follows the Windows language on first run. |
+| 🌍 **4 languages** | Choose Türkçe, English, Deutsch or Español on first launch; change it later in Settings. |
 | 🎨 **Dark / light theme** | Brand-matched navy and violet colors, readable contrast and the Windows 11 dark title bar. |
 | 📥 **System tray** | Keeps running in the tray when closed and can start with Windows. |
 

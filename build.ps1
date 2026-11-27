@@ -42,4 +42,5 @@ $exe = Join-Path $dist 'Companian.exe'
 if ($LASTEXITCODE -ne 0) { throw 'Build failed.' }
 
 $size = [math]::Round((Get-Item $exe).Length / 1KB)
+Get-ChildItem $dist -Filter '*.exe' -File | Where-Object { $_.FullName -ne $exe } | Remove-Item -Force
 Write-Host "Done: $exe ($size KB)"

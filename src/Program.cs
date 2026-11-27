@@ -8,16 +8,16 @@ using System.Windows.Forms;
 [assembly: AssemblyCompany("nedimdmir")]
 [assembly: AssemblyProduct("Companian")]
 [assembly: AssemblyCopyright("Copyright © 2026 nedimdmir")]
-[assembly: AssemblyVersion("1.3.0.0")]
-[assembly: AssemblyFileVersion("1.3.0.0")]
-[assembly: AssemblyInformationalVersion("1.3.0")]
+[assembly: AssemblyVersion("1.4.0.0")]
+[assembly: AssemblyFileVersion("1.4.0.0")]
+[assembly: AssemblyInformationalVersion("1.4.0")]
 
 namespace Companian
 {
     internal static class AppInfo
     {
         public const string Name = "Companian";
-        public const string Version = "1.3.0";
+        public const string Version = "1.4.0";
         public const string Publisher = "nedimdmir";
         public const string RepoUrl = "https://github.com/nedimdmir/Companian";
         public const string Description = "Auto clicker, shutdown timer, keep-awake and reminders for Windows";
@@ -48,7 +48,14 @@ namespace Companian
             Application.SetCompatibleTextRenderingDefault(false);
 
             Settings settings = Settings.Load();
-            Lang.Set(settings.Get("language", Lang.DetectDefault()));
+            string language = settings.Get("language", null);
+            if (string.IsNullOrWhiteSpace(language))
+            {
+                language = LanguagePrompt.Choose();
+                settings.Set("language", language);
+                settings.Save();
+            }
+            Lang.Set(language);
 
             if (uninstall)
             {
