@@ -121,6 +121,7 @@ namespace Companian
         private ComboBox cbLang, cbTheme;
         private CheckBox chkTop, chkTray, chkAuto, chkDesk;
         private Button btnInstall, btnUninstall;
+        private Button btnElevatedShortcut;
         private Label lblInstallState, lblAbout;
         private LinkLabel lnkGit;
 
@@ -804,6 +805,10 @@ namespace Companian
             Label desc = Muted("st_install_desc");
             desc.Margin = new Padding(0, 0, 0, 6);
             page.Controls.Add(Card("st_card_install", desc, Row(chkDesk), Row(btnInstall, btnUninstall), lblInstallState));
+
+            btnElevatedShortcut = Btn("uac_setup_button", "accent");
+            btnElevatedShortcut.Click += delegate { ElevatedShortcut.Request(); };
+            page.Controls.Add(Card("uac_setup_card", Muted("uac_setup_desc"), Row(btnElevatedShortcut)));
 
             lblAbout = new Label { AutoSize = true, Margin = new Padding(0, 2, 0, 4) };
             lnkGit = new LinkLabel { AutoSize = true, Margin = new Padding(0, 0, 0, 2) };

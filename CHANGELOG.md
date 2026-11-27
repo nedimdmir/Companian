@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.2.0 — 2026-11-27
+
+- Settings: add a one-time administrator setup that registers an on-demand, highest-privilege
+  Task Scheduler task and creates a desktop shortcut to run it without another UAC prompt.
+
 ## 1.1.0 — 2026-11-27
 
 - New **Bulk Install Manager** page. Tick programs from a catalog of 40 popular apps, search winget

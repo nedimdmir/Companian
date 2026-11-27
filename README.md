@@ -13,7 +13,7 @@
   <a href="https://github.com/nedimdmir/Companian/actions/workflows/build.yml"><img src="https://github.com/nedimdmir/Companian/actions/workflows/build.yml/badge.svg" alt="Build"></a>
   <a href="https://github.com/nedimdmir/Companian/releases/latest"><img src="https://img.shields.io/github/v/release/nedimdmir/Companian?label=indir%20%2F%20download" alt="Release"></a>
   <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-0078D6?logo=windows" alt="Windows 10 | 11">
-  <img src="https://img.shields.io/badge/admin-gerekmez%20%2F%20not%20required-2ea44f" alt="No admin required">
+  <img src="https://img.shields.io/badge/normal%20use-no%20admin%20required-2ea44f" alt="No admin required for normal use">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT License"></a>
 </p>
 
@@ -38,17 +38,19 @@
 | ⏻ **Kapatma zamanlayıcısı** | Geri sayım ("1 saat sonra") ya da belirli bir saat ("23:30'da") sonunda **kapat, yeniden başlat, uyku, hazırda beklet, ekranı kilitle veya oturumu kapat**. Hızlı seçim düğmeleri (15 dk, 30 dk, 1 sa, 2 sa), son 1 dakikada iptal penceresi, isteğe bağlı zorla kapatma. |
 | ☀️ **Uyanık tut** | Bilgisayarın uykuya geçmesini ve ekranın kapanmasını engeller; süresiz ya da belirli dakika boyunca. İsteğe bağlı olarak fareyi dakikada bir 1 piksel oynatır. |
 | 🔔 **Hatırlatıcılar** | "30 dakika sonra mola ver" gibi tek seferlik veya tekrarlayan bildirimler. |
+| 🛡️ **İsteğe bağlı yönetici kısayolu** | Ayarlar'dan bir kez yönetici onayı vererek Görev Zamanlayıcı'ya en yüksek ayrıcalıklı bir görev ekle ve masaüstü kısayoluyla uygulamayı sonraki açılışlarda UAC penceresi olmadan yönetici olarak başlat. |
 | 🌍 **4 dil** | Türkçe, English, Deutsch, Español. Program anında dil değiştirir, ilk açılışta Windows dilini kullanır. |
 | 🎨 **Koyu / açık tema** | Windows 11 koyu başlık çubuğu desteğiyle. |
 | 📥 **Sistem tepsisi** | Kapatınca tepside çalışmaya devam eder; istersen Windows ile birlikte başlar. |
 
-### Yönetici izni olmadan kurulum
+### Normal kullanım ve isteğe bağlı yönetici kısayolu
 
-Companian **hiçbir zaman yönetici (UAC) izni istemez**:
+Companian normal kullanımda yönetici (UAC) izni istemez:
 
 - Uygulama bildirimi (manifest) `asInvoker` olarak ayarlı; program her zaman senin normal kullanıcı haklarınla çalışır.
 - **Taşınabilir kullanım:** `Companian.exe` dosyasını indirip doğrudan çalıştırman yeterli. Kurulum gerekmez.
 - **Kullanıcıya özel kurulum:** *Ayarlar → Bu kullanıcı için kur* düğmesi programı `%LOCALAPPDATA%\Programs\Companian` klasörüne kopyalar, Başlat menüsüne (istersen masaüstüne) kısayol ekler ve *Yüklü uygulamalar* listesine kaydeder. Her şey senin profilinde ve `HKEY_CURRENT_USER` altında olduğu için Windows izin sormaz. Kaldırmak için *Ayarlar → Kaldır* ya da *Windows Ayarları → Uygulamalar*.
+- **Yönetici olarak kullanmak istersen:** *Ayarlar → UAC Sormadan Çalıştırma Kısayolu Oluştur (Tek Seferlik Kurulum)* düğmesine bas. Bir kez UAC onayı verdikten sonra Companian, `OtomasyonAraci` adlı Görev Zamanlayıcı görevi ve masaüstü kısayolu oluşturur. Sonraki açılışlarda masaüstündeki bu kısayol uygulamayı yönetici olarak başlatır. Uygulamayı taşırsan kurulumu yeniden yap.
 
 > **Not:** Exe dijital olarak imzalı olmadığı için Windows SmartScreen ilk açılışta "Windows bilgisayarınızı korudu" diyebilir. Bu bir yönetici izni değildir: **Ek bilgi → Yine de çalıştır** ile açabilirsin.
 
@@ -105,13 +107,14 @@ powershell -ExecutionPolicy Bypass -File .\build.ps1
 | 🎨 **Dark / light theme** | Including the Windows 11 dark title bar. |
 | 📥 **System tray** | Keeps running in the tray when closed and can start with Windows. |
 
-### Installing without admin rights
+### Normal use and optional administrator shortcut
 
-Companian **never asks for administrator (UAC) rights**:
+Companian does not ask for administrator (UAC) rights during normal use:
 
 - Its manifest uses `asInvoker`, so it always runs with your normal user rights.
 - **Portable:** download `Companian.exe` and run it. No installation needed.
 - **Per-user install:** *Settings → Install for this user* copies the app to `%LOCALAPPDATA%\Programs\Companian`, adds a Start menu (and optional desktop) shortcut and registers it under *Installed apps*. Everything lives in your profile and `HKEY_CURRENT_USER`, so Windows has nothing to ask permission for. Uninstall from *Settings → Uninstall* or *Windows Settings → Apps*.
+- **If you want to run as administrator:** choose *Settings → Create Shortcut to Run Without UAC Prompt (One-Time Setup)*. After one UAC approval, Companian creates a highest-privilege Task Scheduler task named `OtomasyonAraci` and a desktop shortcut. Use that shortcut for later launches. Repeat setup if you move the app.
 
 > **Note:** the exe is not code-signed, so Windows SmartScreen may show "Windows protected your PC" the first time. That is not an admin prompt: choose **More info → Run anyway**.
 
