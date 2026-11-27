@@ -1,0 +1,14 @@
+# Build output (released through GitHub Releases instead)
+dist/
+bin/
+obj/
+*.exe
+*.pdb
+
+# Editors / OS
+.vs/
+.vscode/
+*.user
+*.suo
+Thumbs.db
+Desktop.ini
